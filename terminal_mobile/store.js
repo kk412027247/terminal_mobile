@@ -32,6 +32,7 @@ import {applyMiddleware, combineReducers, createStore} from 'redux';
 import thunk from 'redux-thunk';
 import queryReducer from './reducer/queryReducer';
 import addReducer from './reducer/addReducer';
+import nav from './reducer/navReducer';
 
 //for reactNative
 //import { composeWithDevTools } from 'redux-devtools-extension';
@@ -41,7 +42,7 @@ const middleware = process.env.NODE_ENV !== 'production' ?
   [thunk,require('redux-immutable-state-invariant').default()] :
   [thunk];
 
-const reducer = combineReducers({queryReducer, addReducer});
+const reducer = combineReducers({queryReducer, addReducer, nav});
 
 const initStated = {
   queryReducer:{
