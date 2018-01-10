@@ -18,6 +18,18 @@ export default (state={}, action)=>{
         barcode:action.barcode,
       }
     }
+    case 'FETCH_STATUS':{
+      return{
+        ...state,
+        status:action.status,
+      }
+    }
+    case 'CHECK_LENGTH':{
+      return{
+        ...state,
+        empty:action.empty
+      }
+    }
     default:{
       return state
     }

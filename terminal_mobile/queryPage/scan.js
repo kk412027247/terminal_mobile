@@ -1,16 +1,18 @@
 import React from 'react';
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 import {StyleSheet, View} from 'react-native'
 import {Icon, Text, Button} from 'native-base';
+import {openCamera} from '../actions/navAction';
 
 
-
-export default ({navigation})=>
+const Scan = ({openCamera})=>(
   <View
     contentContainerStyle ={styles.content}
   >
     <View style={styles.buttonBox}>
       <Button
-        onPress={()=>{navigation.navigate('camera')}}
+        onPress={openCamera}
         title={''}
         style={styles.button}
         transparent
@@ -26,13 +28,18 @@ export default ({navigation})=>
 
     </View>
   </View>
+);
+
+Scan.propTypes = {
+  openCamera:PropTypes.func,
+} ;
 
 const styles = StyleSheet.create({
   content:{
     backgroundColor:'#cdd53f'
   },
   buttonBox:{
-    paddingTop:100,
+    paddingTop:20,
     flexBasis:'50%',
   },
   button:{
@@ -52,3 +59,11 @@ const styles = StyleSheet.create({
     color:'#2a7ef6'
   }
 });
+
+
+
+const mapDispatchToProps = dispatch =>({
+  openCamera:()=>dispatch(openCamera()),
+});
+
+export default connect(null,mapDispatchToProps)(Scan)

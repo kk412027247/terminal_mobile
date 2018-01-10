@@ -49,6 +49,7 @@ const initStated = {
     result:[],
     snackBarMessage:'',
     barcode:'',
+    empty:true,
   },
   addReducer:{
     brand:'',
