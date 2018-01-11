@@ -8,6 +8,7 @@ import Result from './result';
 import Status from './status';
 import {fetchDate} from '../actions/queryAction';
 
+
 const Query = ({fetchDate, showResult, TAC})=>(
   <Container>
     <Header searchBar rounded>

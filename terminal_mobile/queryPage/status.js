@@ -1,20 +1,25 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {StyleSheet} from 'react-native';
+import PropTypes from 'prop-types';
 import {View, Spinner, Button, Text, Icon} from 'native-base';
+import {handleNav} from '../actions/navAction';
+import {handleTAC} from '../actions/addAction';
 
 
-const Status = ({status, length,empty}) =>(
+const Status = ({status, length, handleNav, content}) =>(
   <View style={styles.status}>
     {status === 'fetching' ?
       <Spinner/> :
-      status === 'success' && length === 0 && !empty ?
+      status === 'success' && length === 0 && content.length !== 0 ?
       <Button
+        onPress={handleNav.bind(null,'ADD',content)}
+        title={''}
         block
         success
         style={styles.statusButton}
       >
-        <Text style={styles.buttonText}>无匹配数据</Text>
+        <Text style={styles.buttonText}>无匹配数据, 点击新增</Text>
       </Button>:
       status === 'success' && length !== 0 ?
       <Icon name={'ios-checkmark-circle'} style={styles.icon}/> :
@@ -25,6 +30,12 @@ const Status = ({status, length,empty}) =>(
   </View>
 );
 
+Status.propTypes = {
+  status:PropTypes.string,
+  length:PropTypes.number,
+  content:PropTypes.string,
+  handleNav:PropTypes.func,
+};
 
 const styles = StyleSheet.create({
   status:{
@@ -51,7 +62,18 @@ const styles = StyleSheet.create({
 const mapStateToProps = state =>({
   status:state.queryReducer.status,
   length:state.queryReducer.result.length,
-  empty:state.queryReducer.empty,
+  content:state.queryReducer.content,
 });
 
-export default connect(mapStateToProps)(Status);
+const mapDispatchToProps = dispatch => ({
+  handleNav: (nav,TAC) => {
+    dispatch(handleNav(nav));
+    if(!!Number(TAC)){
+      dispatch(handleTAC(TAC))
+    }else{
+      dispatch(handleTAC(''))
+    }
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Status);

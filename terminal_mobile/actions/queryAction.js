@@ -5,19 +5,15 @@ const fetchSuccess = (result)=>({
   result,
 });
 
-const checkEmpty = (bool)=>({
-  type:'CHECK_LENGTH',
-  empty:bool,
+const handleSearchContent = (content)=>({
+  type:'SEARCH_CONTENT',
+  content:content.replace(/(^\s*)|(\s*$)/g, '')
 });
 
 let i =0;
 export const fetchDate = (query)=>(
   dispatch=>{
-    if(query.length === 0){
-      dispatch(checkEmpty(true))
-    }else{
-      dispatch(checkEmpty(false))
-    }
+    dispatch(handleSearchContent(query));
     dispatch(handleFetchStatus('fetching'));
     const check = ++i;
     const _query = query.replace(/(^\s*)|(\s*$)/g, '')

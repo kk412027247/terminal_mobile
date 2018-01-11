@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {handleBrand, handleModel, handleTAC, createTAC} from '../actions/addAction';
 
-const Add = ({handleBrand, handleModel, handleTAC, createTAC})=>(
+const Add = ({handleBrand, handleModel, handleTAC, createTAC, TAC})=>(
   <Container >
     <Header>
       <Left/>
@@ -25,7 +25,10 @@ const Add = ({handleBrand, handleModel, handleTAC, createTAC})=>(
           </Item>
           <Item floatingLabel last>
             <Label>TAC</Label>
-            <Input onChangeText={handleTAC}/>
+            <Input
+              onChangeText={handleTAC}
+              value={TAC}
+            />
           </Item>
         </Form>
         <Button
@@ -66,6 +69,9 @@ const styles = StyleSheet.create({
 });
 
 
+const mapStateToProps = state => ({
+  TAC:state.addReducer.TAC,
+});
 
 const mapDispatchToProps = dispatch => ({
   handleBrand: brand =>dispatch(handleBrand(brand)),
@@ -74,4 +80,4 @@ const mapDispatchToProps = dispatch => ({
   createTAC: () => dispatch(createTAC())
 });
 
-export default connect(null, mapDispatchToProps)(Add);
+export default connect(mapStateToProps, mapDispatchToProps)(Add);

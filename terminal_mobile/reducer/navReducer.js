@@ -33,7 +33,8 @@ export default (state ,action)=>{
     }
     case 'OPEN_CAMERA':{
       return AppNavigator.router.getStateForAction(
-        NavigationActions.navigate({routeName:'camera'})
+        NavigationActions.navigate({routeName:'camera'}),
+        state
       )
     }
     default:{

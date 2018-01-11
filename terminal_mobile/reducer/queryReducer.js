@@ -24,10 +24,10 @@ export default (state={}, action)=>{
         status:action.status,
       }
     }
-    case 'CHECK_LENGTH':{
+    case 'SEARCH_CONTENT':{
       return{
         ...state,
-        empty:action.empty
+        content:action.content
       }
     }
     default:{

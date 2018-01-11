@@ -3,8 +3,9 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {Footer, FooterTab, Button, Icon} from 'native-base';
 import {handleNav} from '../actions/navAction';
+import {handleTAC} from "../actions/addAction";
 
-const FooterTabBar = ({index, navigate}) =>(
+const FooterTabBar = ({index, navigate, content}) =>(
   <Footer>
     <FooterTab>
       <Button
@@ -16,7 +17,7 @@ const FooterTabBar = ({index, navigate}) =>(
       </Button>
       <Button
         active={index === 1}
-        onPress = {navigate.bind(null,'ADD')}
+        onPress = {navigate.bind(null,'ADD',content)}
         title={''}
       >
         <Icon name={index !== 1?'ios-create-outline':'ios-create'}/>
@@ -32,11 +33,19 @@ FooterTabBar.propTypes = {
 
 const mapStateToProps = state =>({
   index:state.nav.index,
+  content:state.queryReducer.content,
 });
 
 
 const mapDispatchToProps = dispatch =>({
-  navigate: nav => dispatch(handleNav(nav))
+  navigate: (nav, TAC) => {
+    dispatch(handleNav(nav));
+    if(!!Number(TAC)){
+      dispatch(handleTAC(TAC))
+    }else{
+      dispatch(handleTAC(''))
+    }
+  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FooterTabBar)
