@@ -1,4 +1,6 @@
+import {AsyncStorage} from 'react-native';
 import host from '../../host';
+import {handleNav} from './navAction';
 
 const fetchSuccess = (result)=>({
   type: 'FETCH_SUCCESS',
@@ -13,27 +15,52 @@ const handleSearchContent = (content)=>({
 let i =0;
 export const fetchDate = (query)=>(
   dispatch=>{
-    dispatch(handleSearchContent(query));
-    dispatch(handleFetchStatus('fetching'));
-    const check = ++i;
-    const _query = query.replace(/(^\s*)|(\s*$)/g, '')
-      .replace(/\s+/g, ' ').split(' ')
-      .reduce((prev,curr)=>([...prev,`"${curr}"`]),[])
-      .toString()
-      .replace(/,/g,' ');
-    fetch(`http://${host}:3001/query`,{
-    method:'post',
-    //credentials:'include',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({query:_query})
-    }).then(res=>res.json())
-      .then(result=>{
-        if(check === i) {
+    (async ()=>{
+      dispatch(handleSearchContent(query));
+      dispatch(handleFetchStatus('fetching'));
+      const check = ++i;
+      const _query = query.replace(/(^\s*)|(\s*$)/g, '')
+        .replace(/\s+/g, ' ').split(' ')
+        .reduce((prev,curr)=>([...prev,`"${curr}"`]),[])
+        .toString()
+        .replace(/,/g,' ');
+      const res = await fetch(`http://${host}:3001/query`,{
+        method:'post',
+        credentials:'include',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({query:_query})
+      });
+      const result = await res.json();
+      if(check === i ) {
+        //如果服务器session过期了，就重新提交一次用户名密码
+        if(result[0]!=="queryNeedSession"){
           dispatch(fetchSuccess(result));
           dispatch(handleFetchStatus('success'))
+        }else{
+          const userInfo = await AsyncStorage.multiGet(['username','password']);
+          if(!!userInfo[0][1] && !!userInfo[1][1]){
+            const _res = await fetch(`http://${host}:3001/signIn`,{
+              method:'post',
+              headers:{'Content-Type':'application/json'},
+              body:JSON.stringify({userName:userInfo[0][1],passWord:userInfo[1][1]})
+            });
+            const _result = await _res.json();
+            if(_result.level>=1 && _result.level <=5){
+              //如果登陆成功，递归执行一次本函数
+              dispatch(fetchDate(query))
+            }else{
+              dispatch(handleNav('SIGN_IN'))
+            }
+          }else{
+            dispatch(handleNav('SIGN_IN'))
+          }
         }
-      })
-      .catch(()=>dispatch(handleFetchStatus('error')))
+      }
+
+    })().catch(()=>dispatch(handleFetchStatus('error')));
+
+
+
   }
 );
 

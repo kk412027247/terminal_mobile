@@ -33,6 +33,7 @@ import thunk from 'redux-thunk';
 import queryReducer from './reducer/queryReducer';
 import addReducer from './reducer/addReducer';
 import nav from './reducer/navReducer';
+import signInReducer from './reducer/signInReducer';
 
 //for reactNative
 //import { composeWithDevTools } from 'redux-devtools-extension';
@@ -42,7 +43,7 @@ const middleware = process.env.NODE_ENV !== 'production' ?
   [thunk,require('redux-immutable-state-invariant').default()] :
   [thunk];
 
-const reducer = combineReducers({queryReducer, addReducer, nav});
+const reducer = combineReducers({queryReducer, addReducer, nav, signInReducer});
 
 const initStated = {
   queryReducer:{
@@ -55,6 +56,10 @@ const initStated = {
     brand:'',
     model:'',
     TAC:'',
+  },
+  signInReducer:{
+    username:'',
+    password:'',
   }
 };
 
