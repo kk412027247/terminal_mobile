@@ -1,6 +1,7 @@
-import {AsyncStorage} from 'react-native';
 import host from '../../host';
 import {handleNav} from './navAction';
+import Realm from "realm";
+import {UserInfoSchema} from '../realm/schema';
 
 const fetchSuccess = (result)=>({
   type: 'FETCH_SUCCESS',
@@ -37,12 +38,17 @@ export const fetchDate = (query)=>(
           dispatch(fetchSuccess(result));
           dispatch(handleFetchStatus('success'))
         }else{
-          const userInfo = await AsyncStorage.multiGet(['username','password']);
-          if(!!userInfo[0][1] && !!userInfo[1][1]){
+          const realm = await Realm.open({schema:[UserInfoSchema]});
+          const userInfo = realm.objects('userInfo').filtered('id=1');
+          
+          if(!!realm.objects('userInfo').filtered('id=1')){
             const _res = await fetch(`http://${host}:3001/signIn`,{
               method:'post',
               headers:{'Content-Type':'application/json'},
-              body:JSON.stringify({userName:userInfo[0][1],passWord:userInfo[1][1]})
+              body:JSON.stringify({
+                userName:userInfo[0].username,
+                passWord:userInfo[0].password,
+              })
             });
             const _result = await _res.json();
             if(_result.level>=1 && _result.level <=5){

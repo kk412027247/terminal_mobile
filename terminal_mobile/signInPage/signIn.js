@@ -1,19 +1,31 @@
 import React from 'react';
+import Realm from 'realm';
 import PropTypes from 'prop-types';
-import {StyleSheet,AsyncStorage} from 'react-native';
+import {StyleSheet} from 'react-native';
+
 import {connect}  from 'react-redux';
-import {Container,Content,Header,Body,Title,Text,Button,Card,Form,Item,Input,Toast} from 'native-base';
+import {Container,Content,Header,Body,Title,Text,Button,Card,Form,Item,Input} from 'native-base';
 import {handleNav} from '../actions/navAction';
 import {handleUsername, handlePassword,handleSignIn} from '../actions/signInAction';
 
+import {UserInfoSchema} from '../realm/schema';
+
 class SignIn extends React.Component{
+
+  state = { realm: null };
   componentDidMount(){
     (async ()=>{
-      const userInfo = await AsyncStorage.multiGet(['username','password']);
-      if(!!userInfo[0][1] && !!userInfo[1][1]){
-        this.props.handleSignIn({userName:userInfo[0][1],passWord:userInfo[1][1]});
+      const realm = await Realm.open({schema:[UserInfoSchema]});
+      const userInfo = realm.objects('userInfo').filtered('id=1') ? realm.objects('userInfo').filtered('id=1')[0] : null;
+      if(!!realm.objects('userInfo').filtered('id=1')){
+        this.props.handleSignIn({
+          userName:userInfo.username,
+          passWord:userInfo.password,
+        })
       }
     })()
+
+
   }
   render(){
     const {handleUsername,handlePassword,handleSignIn} = this.props;
@@ -45,7 +57,7 @@ class SignIn extends React.Component{
             block
             title={''}
             style={styles.button}
-            onPress={handleSignIn}
+            onPress={handleSignIn.bind(null,undefined)}
           >
             <Text>登       录</Text>
           </Button>
@@ -54,44 +66,6 @@ class SignIn extends React.Component{
     )
   }
 }
-
-
-
-// const SignIn = ({handleUsername,handlePassword,handleSignIn}) =>(
-//   <Container>
-//     <Header>
-//       <Body>
-//         <Title> 用户登陆 </Title>
-//       </Body>
-//     </Header>
-//     <Content>
-//       <Card style={styles.card}>
-//         <Form>
-//           <Item>
-//             <Input
-//               onChangeText={handleUsername}
-//               placeholder={'用户名:'}
-//             />
-//           </Item>
-//           <Item last>
-//             <Input
-//               onChangeText={handlePassword}
-//               secureTextEntry={true}
-//               placeholder={'密码:'}/>
-//           </Item>
-//         </Form>
-//       </Card>
-//       <Button
-//         block
-//         title={''}
-//         style={styles.button}
-//         onPress={handleSignIn}
-//       >
-//         <Text>登       录</Text>
-//       </Button>
-//     </Content>
-//   </Container>
-// ) ;
 
 SignIn.propTypes = {
   handleUsername: PropTypes.func,

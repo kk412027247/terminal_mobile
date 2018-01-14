@@ -1,7 +1,9 @@
 import host from '../../host';
 import {handleNav} from './navAction';
 import {Toast} from 'native-base';
-import {AsyncStorage} from 'react-native';
+import Realm from 'realm';
+import {UserInfoSchema} from '../realm/schema';
+
 
 export const handleUsername = (username) =>({
   type:'USERNAME',
@@ -12,7 +14,6 @@ export const handlePassword = (password) => ({
   type:'PASSWORD',
   password,
 });
-
 
 export const handleSignIn =(info)=>(
   (dispatch,getState)=>{
@@ -35,11 +36,14 @@ export const handleSignIn =(info)=>(
       const result = await res.json();
       if(result.level>=1 && result.level <=5){
         dispatch(handleNav('TO_MAIN'));
-        if(getState().signInReducer.username !== '' && getState().signInReducer.password !== ''){
-          await AsyncStorage.multiSet([['username', getState().signInReducer.username],
-            ['password', getState().signInReducer.password]]
-          );
-        }
+        const realm = await Realm.open({schema:[UserInfoSchema]});
+        realm.write(()=>{
+          realm.create('userInfo', {
+            id:1,
+            username:getState().signInReducer.username,
+            password: getState().signInReducer.password,
+          },true)
+        });
       }else{
         Toast.show({
           text:'密码错误',
