@@ -26,7 +26,6 @@ export const handleSignIn =(info)=>(
           passWord:getState().signInReducer.password
         }
       }
-
       const res = await fetch(`http://${host}:3001/signIn`,{
         method:'post',
         credentials:'include',
@@ -54,7 +53,6 @@ export const handleSignIn =(info)=>(
         })
       }
     })().catch((err)=>Toast.show({text:JSON(err)}));
-
   }
 );
 
