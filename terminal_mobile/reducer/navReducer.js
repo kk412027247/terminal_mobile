@@ -1,11 +1,10 @@
 import {NavigationActions} from 'react-navigation';
-//import {AppWithNavigator} from '../../App';
-import AppWithNavigator from '../navigator/navigator'
-import App from "../../App";
-//不需要重新默认值，如果加了的话，第一页会重复渲染，产生一个重复的历史页
-//const initialState = AppWithNavigator.router.getStateForAction(AppWithNavigator.router.getActionForPathAndParams('query'));
+import AppWithNavigator from '../navigator/navigator';
 
-export default (state ,action)=>{
+//这里的路由路径，只能默认渲染第一级
+const initialState = AppWithNavigator.router.getStateForAction(AppWithNavigator.router.getActionForPathAndParams('signIn'));
+
+export default (state=initialState ,action)=>{
   switch(action.type){
     case 'QUERY':{
       return AppWithNavigator.router.getStateForAction(
