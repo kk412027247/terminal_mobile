@@ -13,7 +13,7 @@ class SignIn extends React.Component{
   componentDidMount(){
     (async ()=>{
       const realm = await Realm.open({schema:[UserInfoSchema]});
-      if(!!realm.objects('userInfo').filtered('id=1')){
+      if(!!realm.objects('userInfo')[0]){
         const userInfo = realm.objects('userInfo')[0];
         this.props.handleSignIn({
           userName:userInfo.username,
