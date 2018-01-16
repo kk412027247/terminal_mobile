@@ -4,12 +4,13 @@ import queryReducer from './reducer/queryReducer';
 import addReducer from './reducer/addReducer';
 import nav from './reducer/navReducer';
 import signInReducer from './reducer/signInReducer';
+import selectReducer from './reducer/selectReducer';
 
 const middleware = process.env.NODE_ENV !== 'production' ?
   [thunk,require('redux-immutable-state-invariant').default()] :
   [thunk];
 
-const reducer = combineReducers({queryReducer, addReducer, nav, signInReducer});
+const reducer = combineReducers({queryReducer, addReducer, nav, signInReducer, selectReducer});
 
 const initStated = {
   queryReducer:{
@@ -26,6 +27,11 @@ const initStated = {
   signInReducer:{
     username:'',
     password:'',
+  },
+  selectReducer:{
+    imageUri:'',
+    height:1,
+    width:1,
   }
 };
 

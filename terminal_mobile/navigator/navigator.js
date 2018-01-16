@@ -1,43 +1,33 @@
 import {TabNavigator, StackNavigator} from 'react-navigation';
 import Add from '../addPage/add';
-import Select from '../addPage/select';
-import SignInPage from '../signInPage/signIn';
+import Select from '../select/select';
+import SignIn from '../signInPage/signIn';
 import FooterTabBar from '../footer/footerTabBar';
 import Query from '../queryPage/query';
-import Camera from '../queryPage/camera';
-
-const QueryPage = StackNavigator({
-  _query:{screen: Query},
-  camera:{screen: Camera}
-},{
-  headerMode:'none',
-  //mode:'modal',
-});
-
-const AddPage = StackNavigator({
-  _add:{screen: Add},
-  select:{screen: Select}
-},{
-  headerMode:'none',
-});
+import Camera from '../camera/camera';
+import ShowImage from '../showImage/showImage'
 
 
-const MainPage = TabNavigator({
-  query: {screen: QueryPage},
-  add: {screen: AddPage},
+
+const Main = TabNavigator({
+  query: {screen: Query},
+  add: {screen: Add},
 },{
   tabBarPosition:'bottom',
   tabBarComponent: FooterTabBar,
 });
 
 const AppWithNavigator = StackNavigator({
-  signIn: {screen: SignInPage},
-  main: {screen: MainPage}
+  signIn: {screen: SignIn},
+  main: {screen: Main},
+  select:{screen: Select},
+  camera:{screen: Camera},
+  showImage:{screen: ShowImage}
 },{
   headerMode:'none',
   //mode: 'modal',
   navigationOptions: {
-    //阻止返回
+    //阻止手势返回
     gesturesEnabled: false,
   },
 });

@@ -48,6 +48,13 @@ export default (state=initialState ,action)=>{
         state
       )
     }
+    case 'SHOW_IMAGE':{
+      console.log('SHOW_IMAGE');
+      return AppWithNavigator.router.getStateForAction(
+        NavigationActions.navigate({routeName:'showImage'}),
+        state
+      )
+    }
     default:{
       return AppWithNavigator.router.getStateForAction(action, state)
     }

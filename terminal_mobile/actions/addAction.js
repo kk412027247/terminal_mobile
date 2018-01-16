@@ -3,7 +3,6 @@ import {Toast} from 'native-base';
 import {handleNav} from "./navAction";
 import {UserInfoSchema} from '../realm/schema';
 import Realm from "realm";
-//import {handleFetchStatus} from "./queryAction";
 
 export const handleBrand = (text) => ({
   type:'HANDLE_BRAND',
@@ -23,6 +22,9 @@ export const handleTAC = (text) => ({
 export const createTAC = ()=>(
   (dispatch,getState)=>{
     (async ()=>{
+      if(!getState().addReducer.brand || !getState().addReducer.model || !getState().addReducer.TAC){
+        throw '提交失败，请完善录入信息'
+      }
       const query = {
         '品牌1':getState().addReducer.brand,
         '型号1':getState().addReducer.model,
@@ -34,9 +36,10 @@ export const createTAC = ()=>(
         credentials:'include',
         body:JSON.stringify({docs:[query]})
       });
+
       const result = await res.json();
       if(result[0]!=='createNeedSession'){
-         Toast.show({
+         await Toast.show({
           text:'提交成功',
           position:'top',
           type:'success',
@@ -66,7 +69,14 @@ export const createTAC = ()=>(
           dispatch(handleNav('SIGN_IN'))
         }
       }
-    })().catch((err)=>Toast.show({text:JSON(err)}));
+    })().catch((err)=>{
+      Toast.show({
+        text:err,
+        position:'top',
+        type:'warning',
+        duration:2000
+      })
+    });
 
   }
 );

@@ -2,26 +2,21 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {Text, View, StyleSheet} from 'react-native';
-import {Container,Header,Left,Body,Right,Button,Icon} from 'native-base';
+import {Container, Header, Left, Body, Right, Footer, FooterTab, Button, Icon} from 'native-base';
 import Camera from 'react-native-camera';
 import {barCodeRead, fetchDate} from '../actions/queryAction' ;
 import {goBack} from '../actions/navAction';
 let i = 0;
 
 class BarcodeScan extends Component {
-
   state={flash: Camera.constants.FlashMode.auto};
-
   takePicture = () => this.camera.capture().then(data=>console.log(data)).catch(err=>console.log(err));
-
   componentWillUnmount(){
     if(this.props.barcode !== ''){
       this.props.fetchDate(this.props.barcode)
     }
   }
-
   render () {
-
     const switchFlash = ()=>{
       const flashes = [
         Camera.constants.FlashMode.auto,
@@ -73,6 +68,17 @@ class BarcodeScan extends Component {
             </Button>
           </Camera>
         </View>
+        <Footer>
+          <FooterTab>
+            <Button
+              active
+              title={''}
+              onPress={goBack}
+            >
+              <Icon name={'ios-checkmark-circle-outline'}/>
+            </Button>
+          </FooterTab>
+        </Footer>
       </Container>
     )
   }
