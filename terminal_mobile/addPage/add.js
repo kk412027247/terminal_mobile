@@ -27,14 +27,14 @@ class Add extends React.Component{
                 success={brand !== ''}
                 
               >
-                <Label>厂商（中文）</Label>
+                <Label>品牌</Label>
                 <Input onChangeText={handleBrand}/>
               </Item>
               <Item
                 floatingLabel
                 success={model !== ''}
               >
-                <Label>品牌（英文）</Label>
+                <Label>型号</Label>
                 <Input onChangeText={handleModel}/>
               </Item>
               <Item
