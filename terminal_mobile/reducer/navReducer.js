@@ -18,6 +18,12 @@ export default (state=initialState ,action)=>{
         state
       );
     }
+    case 'PERSON':{
+      return AppWithNavigator.router.getStateForAction(
+        NavigationActions.navigate({routeName:'person'}),
+        state
+      )
+    }
     case 'SIGN_IN':{
       return AppWithNavigator.router.getStateForAction(
         NavigationActions.navigate({routeName:'signIn'}),

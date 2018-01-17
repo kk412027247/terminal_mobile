@@ -29,5 +29,5 @@ android:windowSoftInputMode="adjustPan"
 
 ### fetch formData 穿数据的时候，一定要制定 type，如果不指定 android会出错
 ```
-    type:image/*
+type:image/*
 ```

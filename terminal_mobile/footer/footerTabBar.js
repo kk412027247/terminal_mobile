@@ -22,6 +22,13 @@ const FooterTabBar = ({index, navigate, content}) =>(
       >
         <Icon name={index !== 1 ?'ios-create-outline':'ios-create'}/>
       </Button>
+      <Button
+        title={''}
+        onPress = {navigate.bind(null,'PERSON')}
+        active = {index === 2}
+      >
+        <Icon name={index !==2 ? 'ios-folder-open-outline':'ios-folder-open'}/>
+      </Button>
     </FooterTab>
   </Footer>
 );

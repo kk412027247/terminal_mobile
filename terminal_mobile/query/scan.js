@@ -23,7 +23,7 @@ const Scan = ({openCamera})=>(
 
     <View style={styles.textBox}>
       <Text style={styles.text}>
-        点击扫描
+        扫描 / 拍照
       </Text>
 
     </View>

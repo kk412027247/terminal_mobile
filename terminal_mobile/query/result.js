@@ -15,7 +15,7 @@ const CardList = (props) =>(
   </View>
 ) ;
                         
-const  Result = ({result})=>
+const  Result = ({result})=>(
   <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollViewContainer}>
     {result.map(info=>(
       <Card style={styles.card} key={info._id}>
@@ -25,22 +25,11 @@ const  Result = ({result})=>
       </Card>
     ))}
   </ScrollView>
-
-;
-
-   
-
-
+);
 
 Result.propTypes = {
   result:PropTypes.array,
 };
-
-
-
-
-
-
 
 const styles = StyleSheet.create({
   scrollViewContainer:{

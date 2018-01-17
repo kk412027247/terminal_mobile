@@ -27,7 +27,7 @@ class Add extends React.Component{
                 success={brand !== ''}
                 
               >
-                <Label>品牌</Label>
+                <Label>厂家（中文）</Label>
                 <Input onChangeText={handleBrand}/>
               </Item>
               <Item
