@@ -22,32 +22,29 @@ export const handleTAC = (text) => ({
 export const createTAC = ()=>(
   (dispatch,getState)=>{
     (async ()=>{
-      if(!getState().addReducer.brand || !getState().addReducer.model || !getState().addReducer.TAC){
+      if(!getState().addReducer.brand || !getState().addReducer.model || getState().addReducer.TAC.length !== 8){
         throw '提交失败，请完善录入信息'
       }
-      // const query = {
-      //   '品牌1':getState().addReducer.brand,
-      //   '型号1':getState().addReducer.model,
-      //   'TAC':getState().addReducer.TAC,
-      // };                     
 
       const data = new FormData();
-      data.append('品牌1',getState().addReducer.brand);
-      data.append('型号1',getState().addReducer.model);
+      data.append('brand',getState().addReducer.brand);
+      data.append('model',getState().addReducer.model);
       data.append('TAC',getState().addReducer.TAC);
 
       if(getState().selectReducer.imageUri !== ''){
-        data.append('tacWithImage',{
+        data.append('image',{
           uri:getState().selectReducer.imageUri,
-          type:'photo.type',
-          name:'image',
+          type: 'image/*',
+          name:'image'
         })
       }
+
       const res = await fetch(`http://${host}:3001/createTacWithImage`,{
         method:'post',
         credentials:'include',
         body:data,
       });
+
       const result = await res.json();
       if(result[0]!=='createNeedSession'){
          await Toast.show({
@@ -85,7 +82,8 @@ export const createTAC = ()=>(
         text:err,
         position:'top',
         type:'warning',
-        duration:2000
+        duration:4000,
+        buttonText:'取消'
       })
     });
 

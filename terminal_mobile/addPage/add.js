@@ -39,7 +39,7 @@ class Add extends React.Component{
               </Item>
               <Item
                 floatingLabel
-                success={TAC !== ''}
+                success={TAC.length === 8}
               >
                 <Label>TAC</Label>
                 <Input

@@ -25,3 +25,9 @@ android:windowSoftInputMode="adjustPan"
 
 
 ### 路由只能嵌套路由，其他嵌套方式会出错
+
+
+### fetch formData 穿数据的时候，一定要制定 type，如果不指定 android会出错
+```
+    type:image/*
+```
