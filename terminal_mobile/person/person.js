@@ -9,7 +9,7 @@ const Person = () =>(
     <Header>
       <Left/>
       <Body>
-        <Title>修改记录</Title>
+        <Title>日志记录</Title>
       </Body>
       <Right/>
     </Header>
@@ -19,6 +19,17 @@ const Person = () =>(
           <CardItem header>
             <Icon style={styles.saveIcon} name={'ios-cloud-done'}/>
             <Text style={styles.saveTitle}>已保存</Text>
+            <Right>
+              <Button
+                dark
+                style={styles.updateButton}
+                transparent
+                onPress={()=>{}}
+                title={''}
+              >
+                <Icon name={'md-create'}/>
+              </Button>
+            </Right>
           </CardItem>
           <CardItem>
             <Text style={styles.saveTitle}>厂商: </Text>
@@ -32,20 +43,6 @@ const Person = () =>(
             <Text style={styles.saveTitle}>TAC: </Text>
             <Text>12345678</Text>
           </CardItem>
-          <CardItem footer>
-            <Text>2018/01/15</Text>
-            <Right>
-              <Button
-                dark
-                style={styles.updateButton}
-                transparent
-                onPress={()=>{}}
-                title={''}
-              >
-                <Icon name={'md-create'}/>
-              </Button>
-            </Right>
-          </CardItem>
         </View>
         <View style={styles.right}>
           <Text>123</Text>
@@ -57,6 +54,17 @@ const Person = () =>(
           <CardItem header>
             <Icon style={styles.unSaveIcon} name={'ios-clock'}/>
             <Text style={styles.unSaveTitle}>未保存</Text>
+            <Right>
+              <Button
+                dark
+                style={styles.updateButton}
+                transparent
+                onPress={()=>{}}
+                title={''}
+              >
+                <Icon name={'md-create'}/>
+              </Button>
+            </Right>
           </CardItem>
           <CardItem>
             <Text style={styles.unSaveTitle}>厂商: </Text>
@@ -70,25 +78,12 @@ const Person = () =>(
             <Text style={styles.unSaveTitle}>TAC: </Text>
             <Text>12345678</Text>
           </CardItem>
-          <CardItem footer>
-            <Text>2018/01/15</Text>
-            <Right>
-              <Button
-                dark
-                style={styles.updateButton}
-                transparent
-                onPress={()=>{}}
-                title={''}
-              >
-                <Icon name={'md-create'}/>
-              </Button>
-            </Right>
-          </CardItem>
         </View>
          <View style={styles.right}>
            <Text>456</Text>
          </View>
       </Card>
+      
       <View style={styles.pageButton}>
         <Button
           transparent
@@ -97,6 +92,7 @@ const Person = () =>(
         >
           <Icon name={'ios-arrow-back'}/>
         </Button>
+        <Text>2018/01/15</Text>
         <Button
           transparent
           title={''}
@@ -137,11 +133,12 @@ const styles = StyleSheet.create({
   },
   updateButton:{
     height:15,
-    marginRight:-30
+    marginRight:0
   },
   pageButton:{
     flexDirection:'row',
     justifyContent:'space-around',
+    alignItems:'center',
     marginTop:20 ,
     marginBottom:20,
   },
