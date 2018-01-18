@@ -19,9 +19,6 @@ class Add extends React.Component{
           <Body><Title>数据录入</Title></Body>
           <Right/>
         </Header>
-        <View >
-          <Text >{imageUri?imageUri.match(/[^.]+$/):''}</Text>
-        </View>
         <Content  >
           <View style={styles.content}>
             <Form style={styles.form}>

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {View,Text, StyleSheet} from 'react-native';
+import {View,Text, StyleSheet,Platform} from 'react-native';
 import {Container,Header,Left,Body,Right,Title,Content,Card,CardItem,Icon,Button} from 'native-base';
 
 const Person = () =>(
@@ -9,9 +9,17 @@ const Person = () =>(
     <Header>
       <Left/>
       <Body>
-        <Title>日志记录</Title>
+        <Title>个人中心</Title>
       </Body>
-      <Right/>
+      <Right>
+        <Button
+          title={''}
+          onPress={()=>{}}
+          transparent
+        >
+          <Icon style={styles.personalIcon} name={'ios-person'}/>
+        </Button>
+      </Right>
     </Header>
     <Content padder>
       <Card style={styles.card}>
@@ -142,8 +150,8 @@ const styles = StyleSheet.create({
     marginTop:20 ,
     marginBottom:20,
   },
-  displayIcon:{
-    color:'#7b1fa2'
+  personalIcon:{
+    color: Platform.OS === 'ios' ? '#3f3f3f' : '#f2f2f2'
   } 
 });
 

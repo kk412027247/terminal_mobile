@@ -1,20 +1,21 @@
 import React from 'react';
-import Realm from 'realm';
 import PropTypes from 'prop-types';
 import {StyleSheet} from 'react-native';
 import {connect}  from 'react-redux';
 import {Container,Content,Header,Body,Title,Text,Button,Card,Form,Item,Input} from 'native-base';
 import {handleNav} from '../actions/navAction';
 import {handleUsername, handlePassword,handleSignIn} from '../actions/signInAction';
-import {UserInfoSchema} from '../realm/schema';
+import realm from '../realm/schema';
+
+
 
 class SignIn extends React.Component{
 
   componentDidMount(){
     (async ()=>{
-      const realm = await Realm.open({schema:[UserInfoSchema]});
       if(!!realm.objects('userInfo')[0]){
         const userInfo = realm.objects('userInfo')[0];
+        console.log(realm.objects('userInfo')[0].username);
         this.props.handleSignIn({
           userName:userInfo.username,
           passWord:userInfo.password,
