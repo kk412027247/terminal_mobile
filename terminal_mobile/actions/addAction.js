@@ -31,6 +31,7 @@ export const createTAC = ()=>(
       data.append('model',getState().addReducer.model);
       data.append('TAC',getState().addReducer.TAC);
 
+
       if(getState().selectReducer.imageUri !== ''){
         data.append('image',{
           uri:getState().selectReducer.imageUri,
