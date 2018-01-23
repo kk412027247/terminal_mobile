@@ -7,8 +7,8 @@ import {Container,Header,Left,Body,Right,Title,Content,Card,CardItem,Icon,Button
 const Person = () =>(
   <Container>
     <Header>
-      <Left/>
-      <Body>
+      {Platform.OS === 'ios' ? <Left/> : <View/>}
+      <Body style={Platform.OS === 'android' ? styles.androidHead : {}}>
         <Title>个人中心</Title>
       </Body>
       <Right>
@@ -117,6 +117,9 @@ const styles = StyleSheet.create({
   card:{
     marginBottom:10,
     flexDirection:'row'
+  },
+  androidHead:{
+    marginLeft:'10%'
   },
   left:{
     flex:1

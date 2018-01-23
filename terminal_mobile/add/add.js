@@ -1,50 +1,63 @@
 import React from 'react';
-import {View,StyleSheet, ImageBackground, Dimensions} from 'react-native';
-import {Container,Header,Left,Body, Right, Title, Content, Form, Item, Input, Label, Button, Text, Icon}  from 'native-base';
+import {View,StyleSheet, ImageBackground, Dimensions, Platform} from 'react-native';
+import {Container,Header,Left,Body, Right, Title, Content,
+  Form, Item, Input, Label, Button, Text, Icon}  from 'native-base';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {handleBrand, handleModel, handleTAC, createTAC} from '../actions/addAction';
+import {handleBrand, clean, handleModel, handleTAC, createTAC} from '../actions/addAction';
 import {handleNav} from '../actions/navAction';
 
 
 class Add extends React.Component{
+ 
   render(){
-    const {handleBrand, handleModel, handleTAC, createTAC, TAC, model, brand,handleNav, imageUri, width, height} = this.props;
-    const style = {width: Dimensions.get('window').height * 0.25 * width/height, height: Dimensions.get('window').height * 0.25};
+    const {handleBrand, handleModel, handleTAC, createTAC, TAC, model, brand,handleNav, imageUri, width, height ,clean} = this.props;
+    const style = {width: Dimensions.get('window').height * 0.35 * width/height, height: Dimensions.get('window').height * 0.35};
     const _style = {...style,marginTop:20};
     return(
       <Container >
         <Header>
-          <Left/>
-          <Body><Title>数据录入</Title></Body>
-          <Right/>
+          {Platform.OS === 'ios' ? <Left/> : <View/>}
+          <Body style={Platform.OS === 'android' ? styles.androidHead : {}}><Title>数据录入</Title></Body>
+          <Right>
+            { brand !== '' ||  model !== '' || TAC !== '' || imageUri !== '' ?
+              <Button
+                dark
+                transparent
+                title={''}
+                onPress={clean}
+              >
+                <Icon name={'ios-close'}/>
+              </Button> :
+              <View/>
+            }
+          </Right>
         </Header>
         <Content  >
           <View style={styles.content}>
             <Form style={styles.form}>
               <Item
-                floatingLabel
+                inlineLabel
                 success={brand !== ''}
-                
               >
-                <Label>厂家（中文）</Label>
-                <Input onChangeText={handleBrand}/>
+                <Label>厂商</Label>
+                <Input onChangeText={handleBrand} value={brand}/>
               </Item>
               <Item
-                floatingLabel
+                inlineLabel
                 success={model !== ''}
               >
                 <Label>型号</Label>
-                <Input onChangeText={handleModel}/>
+                <Input value={model} onChangeText={handleModel}/>
               </Item>
               <Item
-                floatingLabel
+                inlineLabel
                 success={TAC.length === 8}
               >
                 <Label>TAC</Label>
                 <Input
                   onChangeText={handleTAC}
-                  value={TAC}
+                  value={TAC !== '' ? TAC : null}
                 />
               </Item>
               {
@@ -102,6 +115,9 @@ const styles = StyleSheet.create({
   content:{
     alignItems:'center',
   } ,
+  androidHead:{
+    marginLeft:'10%'
+  },
   form:{
     width:'80%',
   },
@@ -136,6 +152,7 @@ Add.propTypes = {
   imageUri:PropTypes.string ,
   height: PropTypes.number,
   width: PropTypes.number,
+  clean:PropTypes.func,
 };
 
 const mapStateToProps = state => ({
@@ -152,7 +169,8 @@ const mapDispatchToProps = dispatch => ({
   handleModel: model => dispatch(handleModel(model)),
   handleTAC: TAC => dispatch(handleTAC(TAC)),
   createTAC: () => dispatch(createTAC()),
-  handleNav:(nav) => dispatch(handleNav(nav))
+  handleNav:(nav) => dispatch(handleNav(nav)),
+  clean:()=> dispatch(clean())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Add);

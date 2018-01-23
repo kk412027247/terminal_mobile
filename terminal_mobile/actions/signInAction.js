@@ -54,7 +54,13 @@ export const handleSignIn =(info)=>(
           buttonText:'取消',
         })
       }
-    })().catch((err)=>Toast.show({text:JSON(err)}));
+    })().catch(()=>Toast.show({
+      text:'服务器链接失败',
+      position:'top',
+      type:'danger',
+      duration:3000,
+      buttonText:'取消'
+    }));
   }
 );
 

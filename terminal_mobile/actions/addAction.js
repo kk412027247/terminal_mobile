@@ -3,6 +3,7 @@ import {Toast} from 'native-base';
 import {handleNav} from "./navAction";
 import {UserInfoSchema} from '../realm/schema';
 import Realm from "realm";
+import {selectImages} from './selectAction'
 
 export const handleBrand = (text) => ({
   type:'HANDLE_BRAND',
@@ -31,12 +32,11 @@ export const createTAC = ()=>(
       data.append('model',getState().addReducer.model);
       data.append('TAC',getState().addReducer.TAC);
 
-
       if(getState().selectReducer.imageUri !== ''){
         data.append('image',{
           uri:getState().selectReducer.imageUri,
           type: 'image/*',
-          name:'image'
+          name:Date.now()+'.jpeg',
         })
       }
 
@@ -45,7 +45,6 @@ export const createTAC = ()=>(
         credentials:'include',
         body:data,
       });
-
       const result = await res.json();
       if(result[0]!=='createNeedSession'){
          await Toast.show({
@@ -78,9 +77,9 @@ export const createTAC = ()=>(
           dispatch(handleNav('SIGN_IN'))
         }
       }
-    })().catch((err)=>{
+    })().catch(()=>{
       Toast.show({
-        text:err,
+        text:'提交失败',
         position:'top',
         type:'warning',
         duration:4000,
@@ -92,3 +91,12 @@ export const createTAC = ()=>(
 );
 
 
+
+export const clean = ()=> (
+  dispatch =>{
+    dispatch(handleBrand('')) ;
+    dispatch(handleModel(''));
+    dispatch(handleTAC(''));
+    dispatch(selectImages({length:0},{width:0,height:0}))
+  }
+);

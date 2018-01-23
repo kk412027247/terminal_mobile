@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {Image, Text, Dimensions} from 'react-native';
+import {Image, Title, Dimensions} from 'react-native';
 import {Container,Content,Header,Left,Body,Right,Footer,FooterTab,Button,Icon} from 'native-base';
 import {goBack} from '../actions/navAction'
 
@@ -23,7 +23,7 @@ class ShowImage extends React.Component{
             </Button>
           </Left>
           <Body>
-            <Text>照片</Text>
+            <Title >照片</Title>
           </Body>
           <Right/>
         </Header>

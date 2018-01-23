@@ -15,7 +15,6 @@ class SignIn extends React.Component{
     (async ()=>{
       if(!!realm.objects('userInfo')[0]){
         const userInfo = realm.objects('userInfo')[0];
-        console.log(realm.objects('userInfo')[0].username);
         this.props.handleSignIn({
           userName:userInfo.username,
           passWord:userInfo.password,
