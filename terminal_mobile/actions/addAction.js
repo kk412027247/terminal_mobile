@@ -1,9 +1,9 @@
 import host from '../../host';
 import {Toast} from 'native-base';
 import {handleNav} from "./navAction";
-import {UserInfoSchema} from '../realm/schema';
-import Realm from "realm";
-import {selectImages} from './selectAction'
+import realm from '../realm/schema';
+import {selectImages} from './selectAction';
+import {reSign} from './signInAction'
 
 export const handleBrand = (text) => ({
   type:'HANDLE_BRAND',
@@ -17,8 +17,15 @@ export const handleModel = (text) => ({
 
 export const handleTAC = (text) => ({
   type:'HANDLE_TAC',
-  TAC:text,
+  TAC:text.substring(0,8),
 });
+
+export const toggleStatus = (bool) =>({
+  type:'TOGGLE_STATUS',
+  status:bool?'update':'add'
+});
+
+
 
 export const createTAC = ()=>(
   (dispatch,getState)=>{
@@ -55,9 +62,8 @@ export const createTAC = ()=>(
           buttonText:'确认',
         })
       }else{
-        const realm = await Realm.open({schema:[UserInfoSchema]});
         const userInfo = realm.objects('userInfo').filtered('id=1');
-        if(!!realm.objects('userInfo').filtered('id=1')){
+        if(!!userInfo){
           const _res = await fetch(`http://${host}:3001/signIn`,{
             method:'post',
             headers:{'Content-Type':'application/json'},
@@ -91,7 +97,6 @@ export const createTAC = ()=>(
 );
 
 
-
 export const clean = ()=> (
   dispatch =>{
     dispatch(handleBrand('')) ;
@@ -100,3 +105,4 @@ export const clean = ()=> (
     dispatch(selectImages({length:0},{width:0,height:0}))
   }
 );
+

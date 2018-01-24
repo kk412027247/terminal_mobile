@@ -18,6 +18,12 @@ export default (state={},action)=>{
         TAC:action.TAC
       }
     }
+    case 'TOGGLE_STATUS':{
+      return{
+        ...state,
+        status:action.status
+      }
+    }
     default :{
       return state
     }

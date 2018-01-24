@@ -2,6 +2,7 @@ import host from '../../host';
 import {handleNav} from './navAction';
 import {Toast} from 'native-base';
 import realm from '../realm/schema';
+import {createTAC} from "./addAction";
 
 export const handleUsername = (username) =>({
   type:'USERNAME',
@@ -64,3 +65,28 @@ export const handleSignIn =(info)=>(
   }
 );
 
+
+export const reSign = ()=>(
+  async (dispatch) => {
+    const userInfo = realm.objects('userInfo').filtered('id=1');
+    if(!!userInfo){
+      const _res = await fetch(`http://${host}:3001/signIn`,{
+        method:'post',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          userName:userInfo[0].username,
+          passWord:userInfo[0].password,
+        })
+      });
+      const _result = await _res.json();
+      if(_result.level>=1 && _result.level <=5){
+        //如果登陆成功，递归执行一次本函数
+        dispatch(createTAC())
+      }else{
+        dispatch(handleNav('SIGN_IN'))
+      }
+    }else{
+      dispatch(handleNav('SIGN_IN'))
+    }
+  }
+);
