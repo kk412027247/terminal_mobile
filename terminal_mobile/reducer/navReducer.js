@@ -18,9 +18,9 @@ export default (state=initialState ,action)=>{
         state
       );
     }
-    case 'PERSON':{
+    case 'History':{
       return AppWithNavigator.router.getStateForAction(
-        NavigationActions.navigate({routeName:'person'}),
+        NavigationActions.navigate({routeName:'history'}),
         state
       )
     }
@@ -55,7 +55,7 @@ export default (state=initialState ,action)=>{
       )
     }
     case 'SHOW_IMAGE':{
-      console.log('SHOW_IMAGE');
+      //console.log('SHOW_IMAGE');
       return AppWithNavigator.router.getStateForAction(
         NavigationActions.navigate({routeName:'showImage'}),
         state

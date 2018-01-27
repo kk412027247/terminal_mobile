@@ -8,6 +8,14 @@ export default (state={},action)=>{
         height:action.height,
       }
     }
+    case 'HANDLE_IMAGE':{
+      return{
+        ...state,
+        imageUri:action.imageUri,
+        width:action.width,
+        height:action.height,
+      }
+    }
     default: {
       return state
     }

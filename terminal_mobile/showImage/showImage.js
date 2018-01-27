@@ -1,15 +1,19 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {Image, Title, Dimensions} from 'react-native';
-import {Container,Content,Header,Left,Body,Right,Footer,FooterTab,Button,Icon} from 'native-base';
+import {Image,  Dimensions} from 'react-native';
+import {Container,Content,Header,Left,Body,Title,Right,Footer,FooterTab,Button,Icon} from 'native-base';
 import {goBack} from '../actions/navAction'
 
 class ShowImage extends React.Component{
-
   render(){
     const {uri,width,height,goBack} = this.props;
-    const style = {width:Dimensions.get('window').width, height:Dimensions.get('window').width * height / width};
+    const style = {
+      width:Dimensions.get('window').width,
+      height:Dimensions.get('window').width * height / width
+    };
+
+    //console.log(uri);
     return(
       <Container>
         <Header>

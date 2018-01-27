@@ -6,14 +6,14 @@ import FooterTabBar from '../footer/footerTabBar';
 import Query from '../query/query';
 import Camera from '../camera/camera';
 import ShowImage from '../showImage/showImage';
-import Person from '../person/person';
+import History from '../history/history';
 
 
 
 const Main = TabNavigator({
   query: {screen: Query},
   add: {screen: Add},
-  person:{screen: Person},
+  history:{screen: History},
 },{
   tabBarPosition:'bottom',
   tabBarComponent: FooterTabBar,

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {Container, Header, Left, Body, Right, Content, Footer, FooterTab,Button, Icon, Text} from 'native-base';
+import {Container, Header, Left, Body, Right, Title, Content, Footer, FooterTab,Button, Icon, Text} from 'native-base';
 import {goBack} from '../actions/navAction';
 import CameraRollPicker from 'react-native-camera-roll-picker';
 import {selectImages} from '../actions/selectAction';
@@ -24,7 +24,7 @@ class Select extends Component {
             </Button>
           </Left>
           <Body>
-            <Text>图片选择</Text>
+            <Title>照片选择</Title>
           </Body>
           <Right/>
         </Header>

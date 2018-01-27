@@ -1,47 +1,34 @@
 import React from 'react';
-import {View,StyleSheet, ImageBackground, Dimensions, Platform, Alert} from 'react-native';
+import {View,StyleSheet, ImageBackground, Dimensions, Platform} from 'react-native';
 import {Container,Header,Left,Body, Right, Title, Content,
   Form, Item, Input, Label, Button, Text, Icon}  from 'native-base';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {handleBrand, clean, handleModel, handleTAC, createTAC, toggleStatus} from '../actions/addAction';
+import {handleBrand, clean, handleModel, handleTAC, createTAC, toggleStatus, searchHistory} from '../actions/addAction';
 import {handleNav} from '../actions/navAction';
-import host from "../../host";
-
 
 class Add extends React.Component{
   shouldComponentUpdate(nextProps){
     if(nextProps.TAC.length === 8 && nextProps.TAC !== this.props.TAC){
-      fetch(`http://${host}:3001/searchHistory`,{
-        method:'post',
-        headers:{'Content-Type':'application/json'},
-        credentials:'include',
-        body:JSON.stringify({TAC:Number(nextProps.TAC)})
-      }).then(res=>res.json())
-        .then(result=>{
-          if(result){
-            Alert.alert('提示','该信息为今天录入／已经缓存',[
-              {text:'取消', onPress:()=>this.props.toggleStatus(false)},
-              {text:'查看',onPress:()=>this.props.toggleStatus(true)},
-            ],{
-              cancelable:false
-            })
-          }
-        });
+      nextProps.searchHistory()
     }
     return nextProps !== this.props
   }
-  
   render(){
     const {handleBrand, handleModel, handleTAC, createTAC,
       TAC, model, brand,handleNav, imageUri, width, height ,clean, status} = this.props;
-    const style = {width: Dimensions.get('window').height * 0.35 * width/height, height: Dimensions.get('window').height * 0.35};
+    const style = {
+      width: Dimensions.get('window').height * 0.35 * width/height,
+      height: Dimensions.get('window').height * 0.35
+    };
     const _style = {...style,marginTop:20};
     return(
       <Container >
         <Header>
           {Platform.OS === 'ios' ? <Left/> : <View/>}
-          <Body style={Platform.OS === 'android' ? styles.androidHead : {}}><Title>数据录入</Title></Body>
+          <Body style={Platform.OS === 'android' ? styles.androidHead : {}}>
+            <Title>{status==='add'?'录入':'修改'}数据</Title>
+          </Body>
           <Right>
             { brand !== '' ||  model !== '' || TAC !== '' || imageUri !== '' ?
               <Button
@@ -61,6 +48,19 @@ class Add extends React.Component{
             <Form style={styles.form}>
               <Item
                 inlineLabel
+                success={TAC.length === 8}
+              >
+                <Label>TAC</Label>
+                <Input
+                  onChangeText={handleTAC}
+                  value={TAC !== '' ? TAC : null}
+                  disabled={status === 'update'}
+                />
+                {status === 'update' ? <Icon style={styles.lockIcon} name='ios-lock' /> : <View/>  }
+
+              </Item>
+              <Item
+                inlineLabel
                 success={brand !== ''}
               >
                 <Label>厂商</Label>
@@ -72,16 +72,6 @@ class Add extends React.Component{
               >
                 <Label>型号</Label>
                 <Input value={model} onChangeText={handleModel}/>
-              </Item>
-              <Item
-                inlineLabel
-                success={TAC.length === 8}
-              >
-                <Label>TAC</Label>
-                <Input
-                  onChangeText={handleTAC}
-                  value={TAC !== '' ? TAC : null}
-                />
               </Item>
               {
                 imageUri === '' ?
@@ -117,7 +107,8 @@ class Add extends React.Component{
             <Button
               onPress={createTAC}
               block
-              primary
+              primary={status === 'add'}
+              warning={status === 'update'}
               style={styles.button}
               title={''}>
               <Text>{status === 'add'?' 录 入 ':' 修 改 '}</Text>
@@ -162,6 +153,9 @@ const styles = StyleSheet.create({
   } ,
   cleanIcon:{
     color: Platform.OS === 'ios' ? '#000000' : '#ffffff'
+  },
+  lockIcon:{
+    color:'#606161'
   }
 });
 
@@ -181,6 +175,7 @@ Add.propTypes = {
   width: PropTypes.number,
   clean:PropTypes.func,
   status:PropTypes.string,
+  searchHistory:PropTypes.func,
 };
 
 const mapStateToProps = state => ({
@@ -200,7 +195,8 @@ const mapDispatchToProps = dispatch => ({
   createTAC: () => dispatch(createTAC()),
   handleNav:(nav) => dispatch(handleNav(nav)),
   clean:()=> {dispatch(clean());dispatch(toggleStatus(false))} ,
-  toggleStatus: (bool) => dispatch(toggleStatus(bool))
+  toggleStatus: (bool) => dispatch(toggleStatus(bool)),
+  searchHistory: () => dispatch(searchHistory())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Add);
