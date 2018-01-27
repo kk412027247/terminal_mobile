@@ -5,7 +5,7 @@ import {StyleSheet, Text, View, Image ,TouchableOpacity, Dimensions} from 'react
 import {Right, Card, CardItem, Icon, Button} from 'native-base';
 import {handleNav} from '../actions/navAction' ;
 import {handleImage} from '../actions/selectAction';
-import {handleModel,handleBrand,handleTAC,toggleStatus} from '../actions/addAction';
+import {handleTAC} from '../actions/addAction';
 
 
 class HistoryItem extends React.Component{
