@@ -6,17 +6,24 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {handleBrand, clean, handleModel, handleTAC, createTAC, toggleStatus, searchHistory} from '../actions/addAction';
 import {handleNav} from '../actions/navAction';
+let i = 0;
+const statuses = ['update','delete'];
 
 class Add extends React.Component{
+
   shouldComponentUpdate(nextProps){
-    if(nextProps.TAC.length === 8 && nextProps.TAC !== this.props.TAC){
+    if(nextProps.TAC.length === 8 && nextProps.TAC !== this.props.TAC && this.props.index !==2){
       nextProps.searchHistory()
+    }
+    if(this.props.index === 1 && nextProps.index !== 1){
+      this.props.clean();
     }
     return nextProps !== this.props
   }
+
   render(){
     const {handleBrand, handleModel, handleTAC, createTAC,
-      TAC, model, brand,handleNav, imageUri, width, height ,clean, status} = this.props;
+      TAC, model, brand,handleNav, imageUri, width, height ,clean, status, toggleStatus} = this.props;
     const style = {
       width: Dimensions.get('window').height * 0.35 * width/height,
       height: Dimensions.get('window').height * 0.35
@@ -24,17 +31,17 @@ class Add extends React.Component{
     const _style = {...style,marginTop:20};
     return(
       <Container >
+
         <Header>
           {Platform.OS === 'ios' ? <Left/> : <View/>}
           <Body style={Platform.OS === 'android' ? styles.androidHead : {}}>
-            <Title>{status==='add'?'录入':'修改'}数据</Title>
+            <Title>{status==='add'?'录入':status==='update'?'修改':'删除'}数据</Title>
           </Body>
           <Right>
             { brand !== '' ||  model !== '' || TAC !== '' || imageUri !== '' ?
               <Button
                 dark
                 transparent
-                title={''}
                 onPress={clean}
               >
                 <Icon style={styles.cleanIcon} name={'ios-close'}/>
@@ -54,9 +61,21 @@ class Add extends React.Component{
                 <Input
                   onChangeText={handleTAC}
                   value={TAC !== '' ? TAC : null}
-                  disabled={status === 'update'}
+                  disabled={status !== 'add'}
                 />
-                {status === 'update' ? <Icon style={styles.lockIcon} name='ios-lock' /> : <View/>  }
+                {
+                  status !== 'add' ?
+                  <Button
+                    transparent
+                    onPress={toggleStatus}
+                  >
+                    <Icon
+                      style={styles.lockIcon}
+                      name={status === 'update'?name='ios-lock':status === 'delete'?'ios-trash':'ios-add'}
+                    />
+                  </Button> :
+                  <View/>  
+                }
 
               </Item>
               <Item
@@ -79,7 +98,6 @@ class Add extends React.Component{
                   info
                   style={styles.iconButton}
                   transparent
-                  title={''}
                   onPress={handleNav.bind(null,'TO_SELECT')}
                 >
                   <Icon style={styles.icon} name={'ios-image'}/>
@@ -90,12 +108,10 @@ class Add extends React.Component{
                 >
                   <Button
                     transparent
-                    title={''}
                     onPress={handleNav.bind(null,'SHOW_IMAGE')}
                     style={style}>
                     <Button
                       transparent
-                      title={''}
                       onPress={handleNav.bind(null,'TO_SELECT')}
                     >
                       <Icon style={styles.replaceIcon} name={'md-refresh-circle'}/>
@@ -109,9 +125,10 @@ class Add extends React.Component{
               block
               primary={status === 'add'}
               warning={status === 'update'}
+              danger={status === 'delete'}
               style={styles.button}
               title={''}>
-              <Text>{status === 'add'?' 录 入 ':' 修 改 '}</Text>
+              <Text>{status === 'add'?' 录 入 ':status === 'update'?' 修 改 ':' 删 除 '}</Text>
             </Button>
           </View>
         </Content>
@@ -119,8 +136,6 @@ class Add extends React.Component{
     )
   }
 }
-
-
 
 const styles = StyleSheet.create({
   container:{
@@ -166,7 +181,6 @@ Add.propTypes = {
   handleTAC: PropTypes.func,
   createTAC: PropTypes.func,
   handleNav: PropTypes.func,
-  toggleStatus:PropTypes.func,
   TAC:PropTypes.string,
   brand:PropTypes.string,
   model:PropTypes.string,
@@ -176,6 +190,7 @@ Add.propTypes = {
   clean:PropTypes.func,
   status:PropTypes.string,
   searchHistory:PropTypes.func,
+  toggleStatus:PropTypes.func,
 };
 
 const mapStateToProps = state => ({
@@ -186,6 +201,7 @@ const mapStateToProps = state => ({
   height: state.selectReducer.height,
   width: state.selectReducer.width,
   status: state.addReducer.status,
+  index: state.nav.routes[1].index,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -194,9 +210,13 @@ const mapDispatchToProps = dispatch => ({
   handleTAC: TAC => dispatch(handleTAC(TAC)),
   createTAC: () => dispatch(createTAC()),
   handleNav:(nav) => dispatch(handleNav(nav)),
-  clean:()=> {dispatch(clean());dispatch(toggleStatus(false))} ,
-  toggleStatus: (bool) => dispatch(toggleStatus(bool)),
-  searchHistory: () => dispatch(searchHistory())
+  clean:()=> {
+    dispatch(clean());
+    dispatch(toggleStatus('add'))
+  } ,
+  searchHistory: () => dispatch(searchHistory()),
+  toggleStatus: () => dispatch(toggleStatus(statuses[ ++i % 2 ]))
+
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Add);

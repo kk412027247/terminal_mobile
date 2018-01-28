@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {View, ScrollView,StyleSheet,Platform,Dimensions} from 'react-native';
-import {Container,Content,Header,Left,Body,Right,Title,Icon,Button} from 'native-base';
+import {View, StyleSheet,Platform} from 'react-native';
+import {Container,Header,Left,Body,Right,Title,Icon,Button} from 'native-base';
 import {getUserHistory} from '../actions/historyAction';
 import HistoryList  from './historyList';
 
@@ -30,10 +30,7 @@ class Person extends React.Component{
             </Button>
           </Right>
         </Header>
-
-          <HistoryList/>
-        
-
+        <HistoryList/>
       </Container>
     )
   }
@@ -51,7 +48,9 @@ const styles = StyleSheet.create({
   left:{
     flex:1
   },
-
+  personalIcon:{
+    color:'#282828'
+  }
 });
 
 Person.propTypes = {

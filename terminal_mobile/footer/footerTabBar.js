@@ -10,7 +10,7 @@ const FooterTabBar = ({index, navigate, content}) =>(
     <FooterTab>
       <Button
         active={index === 0}
-        onPress = {navigate.bind(null,'QUERY')}
+        onPress = {navigate.bind(null,'QUERY',content)}
         title={''}
       >
         <Icon name={index !==0 ?'ios-search-outline':'ios-search'}/>
@@ -24,7 +24,7 @@ const FooterTabBar = ({index, navigate, content}) =>(
       </Button>
       <Button
         title={''}
-        onPress = {navigate.bind(null,'History')}
+        onPress = {navigate.bind(null,'History',content)}
         active = {index === 2}
       >
         <Icon name={index !==2 ? 'ios-folder-open-outline':'ios-folder-open'}/>
@@ -40,7 +40,8 @@ FooterTabBar.propTypes = {
 
 const mapStateToProps = state =>({
   index:state.nav.routes[1].index,
-  content:state.queryReducer.content,
+  content: state.addReducer.TAC !== '' ? state.addReducer.TAC : state.queryReducer.content,
+
 });
 
 

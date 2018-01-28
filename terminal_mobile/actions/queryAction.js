@@ -8,7 +8,7 @@ const fetchSuccess = (result)=>({
   result,
 });
 
-const handleSearchContent = (content)=>({
+export const handleSearchContent = (content)=>({
   type:'SEARCH_CONTENT',
   content:content.replace(/(^\s*)|(\s*$)/g, '')
 });

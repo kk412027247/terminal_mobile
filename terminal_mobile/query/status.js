@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Keyboard} from 'react-native';
 import PropTypes from 'prop-types';
 import {View, Spinner, Button, Text, Icon} from 'native-base';
 import {handleNav} from '../actions/navAction';
@@ -67,6 +67,7 @@ const mapStateToProps = state =>({
 
 const mapDispatchToProps = dispatch => ({
   handleNav: (nav,TAC) => {
+    Keyboard.dismiss();
     dispatch(handleNav(nav));
     if(!!Number(TAC)){
       dispatch(handleTAC(TAC))

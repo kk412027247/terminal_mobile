@@ -9,7 +9,7 @@ import Status from './status';
 import {fetchDate} from '../actions/queryAction';
 
 
-const Query = ({fetchDate, showResult, TAC})=>(
+const Query = ({fetchDate, showResult, TAC,connect})=>(
   <Container>
     <Header searchBar rounded>
       <Item>
@@ -17,6 +17,7 @@ const Query = ({fetchDate, showResult, TAC})=>(
           placeholder={' 搜索 :  TAC、厂商、品牌、型号'}
           onChangeText={fetchDate}
           defaultValue={TAC === '' ? null : TAC}
+          value={connect}
         />
         <Icon name={'ios-search'}/>
       </Item>
@@ -47,6 +48,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = state =>({
   showResult: state.queryReducer.result.length !== 0,
   TAC:state.queryReducer.barcode,
+  connect:state.queryReducer.content,
 });
 
 const mapDispatchToProps = dispatch =>({

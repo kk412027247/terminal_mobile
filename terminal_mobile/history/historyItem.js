@@ -5,7 +5,7 @@ import {StyleSheet, Text, View, Image ,TouchableOpacity, Dimensions} from 'react
 import {Right, Card, CardItem, Icon, Button} from 'native-base';
 import {handleNav} from '../actions/navAction' ;
 import {handleImage} from '../actions/selectAction';
-import {handleTAC} from '../actions/addAction';
+import {handleBrand, handleModel, handleTAC, toggleStatus} from '../actions/addAction';
 
 
 class HistoryItem extends React.Component{
@@ -16,7 +16,11 @@ class HistoryItem extends React.Component{
       height: Dimensions.get('window').height / 3.5
     };
     const titleStyle = status==='saved' ? styles.saveTitle : styles.unSaveTitle ;
-
+    const image = {
+      imageWidth: width,
+      imageHeight: height,
+      imagePath: uri.replace(/[\S]+3001/,'')
+    };
     return(
       <Card style={styles.card}>
         <View style={styles.left}>
@@ -33,7 +37,7 @@ class HistoryItem extends React.Component{
                 dark
                 style={styles.updateButton}
                 transparent
-                onPress={updateHistory.bind(null,TAC,'ADD')}
+                onPress={updateHistory.bind(null,TAC,'ADD',brand,model,image)}
                 title={''}
               >
                 <Icon name={'md-create'}/>
@@ -55,11 +59,7 @@ class HistoryItem extends React.Component{
         </View>
         <View style={styles.right}>
           <TouchableOpacity
-            onPress={openImage.bind(null,{
-              imageWidth: width,
-              imageHeight: height,
-              imagePath: uri.replace(/[\S]+3001/,'')
-            },'SHOW_IMAGE')}
+            onPress={openImage.bind(null,image,'SHOW_IMAGE')}
           >
             <Image
               style={imageStyle}
@@ -95,8 +95,6 @@ const styles = StyleSheet.create({
   card:{
     marginBottom:10,
     flexDirection:'row',
-    //marginLeft:'30%',
-    //marginRight:'10%',
   },
   saveTitle:{
     fontWeight:'bold',
@@ -133,9 +131,13 @@ const mapDispatchToProps = dispatch =>({
     dispatch(handleImage(image));
     dispatch(handleNav(nav));
   },
-  updateHistory: (TAC,nav)=> {
+  updateHistory: (TAC,nav,brand,model,image)=> {
     dispatch(handleTAC(TAC.toString()));
     dispatch(handleNav(nav));
+    dispatch(handleBrand(brand));
+    dispatch(handleModel(model));
+    dispatch(toggleStatus('update'));
+    dispatch(handleImage(image))
   }
 });
 

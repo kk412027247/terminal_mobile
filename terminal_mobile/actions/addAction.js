@@ -4,6 +4,7 @@ import {Toast} from 'native-base';
 import {handleNav} from "./navAction";
 import realm from '../realm/schema';
 import {handleImage} from './selectAction';
+import {handleSearchContent} from './queryAction'
 //import {reSign} from './signInAction'
 
 export const handleBrand = (text) => ({
@@ -21,9 +22,9 @@ export const handleTAC = (text) => ({
   TAC:text.substring(0,8),
 });
 
-export const toggleStatus = (bool) =>({
+export const toggleStatus = (status) =>({
   type:'TOGGLE_STATUS',
-  status:bool?'update':'add'
+  status,
 });
 
 export const createTAC = ()=>(
@@ -112,7 +113,8 @@ export const clean = ()=> (
     dispatch(handleBrand('')) ;
     dispatch(handleModel(''));
     dispatch(handleTAC(''));
-    dispatch(handleImage({}))
+    dispatch(handleImage({}));
+    dispatch(handleSearchContent(''))
   }
 );
 
@@ -129,13 +131,13 @@ export const searchHistory = () => (
       if(!!result){
         if(result[0]!=='queryNeedSession'){
           //console.log(result);
-          Alert.alert('提示','该信息为今天录入／已经缓存',[
+          Alert.alert('提示','该信息已缓存',[
             {text:'取消', onPress:()=>{
-              dispatch(toggleStatus(false));
+              dispatch(toggleStatus('add'));
               dispatch(handleTAC(''));
             }},
             {text:'查看',onPress:()=>{
-                dispatch(toggleStatus(true));
+                dispatch(toggleStatus('update'));
                 dispatch(handleBrand(result.history[0]['品牌1']));
                 dispatch(handleModel(result.history[0]['型号1']));
                 dispatch(handleImage(result.history[0]));
