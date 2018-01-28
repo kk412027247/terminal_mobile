@@ -118,7 +118,7 @@ class FlatListDemo extends Component {
           onRefresh={this.handleRefresh}
           refreshing={this.state.refreshing}
           onEndReached={this.handleLoadMore}
-          onEndReachedThreshold={50}
+          onEndReachedThreshold={0}
         />
       </List>
     );

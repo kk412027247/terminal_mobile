@@ -5,14 +5,14 @@ import addReducer from './reducer/addReducer';
 import nav from './reducer/navReducer';
 import signInReducer from './reducer/signInReducer';
 import selectReducer from './reducer/selectReducer';
-import personReducer from './reducer/personReducer';
+import historyReducer from './reducer/historyReducer';
 
 const middleware = process.env.NODE_ENV !== 'production' ?
   //[thunk,require('redux-immutable-state-invariant').default()] :
   [thunk] :
   [thunk];
 
-const reducer = combineReducers({queryReducer, addReducer, nav, signInReducer, selectReducer, personReducer});
+const reducer = combineReducers({queryReducer, addReducer, nav, signInReducer, selectReducer, historyReducer});
 
 const initStated = {
   queryReducer:{
@@ -36,8 +36,11 @@ const initStated = {
     height:1,
     width:1,
   },
-  personReducer:{
+  historyReducer:{
     history:[],
+    refresh:false,
+    skip:0,
+    stopLoadMore:false,
   }
 };
 

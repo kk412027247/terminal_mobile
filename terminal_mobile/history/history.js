@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {View, StyleSheet,Platform,Dimensions} from 'react-native';
-import {Container,Header,Left,Body,Right,Title,Content,Icon,Button} from 'native-base';
-import {getUserHistory} from '../actions/personAction';
+import {View, ScrollView,StyleSheet,Platform,Dimensions} from 'react-native';
+import {Container,Content,Header,Left,Body,Right,Title,Icon,Button} from 'native-base';
+import {getUserHistory} from '../actions/historyAction';
 import HistoryList  from './historyList';
 
 class Person extends React.Component{
@@ -30,9 +30,10 @@ class Person extends React.Component{
             </Button>
           </Right>
         </Header>
-        <Content padder>
+
           <HistoryList/>
-        </Content>
+        
+
       </Container>
     )
   }
@@ -50,39 +51,7 @@ const styles = StyleSheet.create({
   left:{
     flex:1
   },
-  right:{
-    //width:100,
-    width:Dimensions.get('window').width/3.5,
-    backgroundColor:'#c35ccc'
-  },
-  saveTitle:{
-    fontWeight:'bold',
-    color:'#43a047'
-  },
-  saveIcon:{
-    color:'#43a047'
-  },
-  unSaveTitle:{
-    fontWeight:'bold',
-    color:'#ffb300',
-  } ,
-  unSaveIcon:{
-    color:'#ffb300'
-  },
-  updateButton:{
-    height:15,
-    marginRight:0
-  },
-  pageButton:{
-    flexDirection:'row',
-    justifyContent:'space-around',
-    alignItems:'center',
-    marginTop:20 ,
-    marginBottom:20,
-  },
-  personalIcon:{
-    color: Platform.OS === 'ios' ? '#3f3f3f' : '#f2f2f2'
-  } 
+
 });
 
 Person.propTypes = {

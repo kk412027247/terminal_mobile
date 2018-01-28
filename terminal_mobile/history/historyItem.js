@@ -91,11 +91,12 @@ const styles = StyleSheet.create({
   },
   right:{
     width:Dimensions.get('window').width/3.5,
-    //backgroundColor:'#c35ccc'
   },
   card:{
     marginBottom:10,
-    flexDirection:'row'
+    flexDirection:'row',
+    //marginLeft:'30%',
+    //marginRight:'10%',
   },
   saveTitle:{
     fontWeight:'bold',
