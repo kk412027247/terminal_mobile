@@ -6,8 +6,6 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {handleBrand, clean, handleModel, handleTAC, createTAC, toggleStatus, searchHistory} from '../actions/addAction';
 import {handleNav} from '../actions/navAction';
-let i = 0;
-const statuses = ['update','delete'];
 
 class Add extends React.Component{
 
@@ -28,7 +26,7 @@ class Add extends React.Component{
       width: Dimensions.get('window').height * 0.35 * width/height,
       height: Dimensions.get('window').height * 0.35
     };
-    const _style = {...style,marginTop:20};
+    const _style = {...style, marginTop:20};
     return(
       <Container >
 
@@ -60,18 +58,18 @@ class Add extends React.Component{
                 <Label>TAC</Label>
                 <Input
                   onChangeText={handleTAC}
-                  value={TAC !== '' ? TAC : null}
+                  value={TAC}
                   disabled={status !== 'add'}
                 />
                 {
                   status !== 'add' ?
                   <Button
                     transparent
-                    onPress={toggleStatus}
+                    onPress={toggleStatus.bind(null,status)}
                   >
                     <Icon
                       style={styles.lockIcon}
-                      name={status === 'update'?name='ios-lock':status === 'delete'?'ios-trash':'ios-add'}
+                      name={status === 'update'? 'ios-lock':status === 'delete'?'ios-trash':'ios-add'}
                     />
                   </Button> :
                   <View/>  
@@ -102,22 +100,25 @@ class Add extends React.Component{
                 >
                   <Icon style={styles.icon} name={'ios-image'}/>
                 </Button> :
-                <ImageBackground
-                  style={_style}
-                  source={imageUri !== '' ? {uri:imageUri} : null}
-                >
-                  <Button
-                    transparent
-                    onPress={handleNav.bind(null,'SHOW_IMAGE')}
-                    style={style}>
+                <View style={styles.overflow}>
+                  <ImageBackground
+                    style={_style}
+                    source={imageUri !== '' ? {uri:imageUri} : null}
+                  >
                     <Button
                       transparent
-                      onPress={handleNav.bind(null,'TO_SELECT')}
-                    >
-                      <Icon style={styles.replaceIcon} name={'md-refresh-circle'}/>
+                      onPress={handleNav.bind(null,'SHOW_IMAGE')}
+                      style={style}>
+                      <Button
+                        transparent
+                        onPress={handleNav.bind(null,'TO_SELECT')}
+                      >
+                        <Icon style={styles.replaceIcon} name={'md-refresh-circle'}/>
+                      </Button>
                     </Button>
-                  </Button>
-                </ImageBackground>
+                  </ImageBackground>
+                </View>
+
               }
             </Form>
             <Button
@@ -144,6 +145,9 @@ const styles = StyleSheet.create({
   content:{
     alignItems:'center',
   } ,
+  overflow:{
+    overflow: 'hidden'
+  },
   androidHead:{
     marginLeft:'10%'
   },
@@ -215,7 +219,13 @@ const mapDispatchToProps = dispatch => ({
     dispatch(toggleStatus('add'))
   } ,
   searchHistory: () => dispatch(searchHistory()),
-  toggleStatus: () => dispatch(toggleStatus(statuses[ ++i % 2 ]))
+  toggleStatus: (status) => {
+    if(status === 'update'){
+      dispatch(toggleStatus('delete'))
+    }else{
+      dispatch(toggleStatus('update'))  
+    }
+  }
 
 });
 

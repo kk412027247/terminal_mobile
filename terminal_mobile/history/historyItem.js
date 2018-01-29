@@ -57,16 +57,23 @@ class HistoryItem extends React.Component{
             <Text>{TAC}</Text>
           </CardItem>
         </View>
-        <View style={styles.right}>
-          <TouchableOpacity
-            onPress={openImage.bind(null,image,'SHOW_IMAGE')}
-          >
-            <Image
-              style={imageStyle}
-              source={{uri}}
-            />
-          </TouchableOpacity>
-        </View>
+        {
+          uri ?
+          <View style={styles.right}>
+            <TouchableOpacity
+              onPress={openImage.bind(null,image,'SHOW_IMAGE')}
+            >
+              <Image
+                style={imageStyle}
+                source={{uri}}
+              />
+            </TouchableOpacity>
+          </View>:
+          <View style={styles.noImage}>
+            <Text>无图片</Text>
+          </View>
+        }
+
       </Card>
     )
   }
@@ -91,6 +98,14 @@ const styles = StyleSheet.create({
   },
   right:{
     width:Dimensions.get('window').width/3.5,
+    overflow: 'hidden',
+
+  },
+  noImage:{
+    width:Dimensions.get('window').width/3.5,
+    justifyContent:'center',
+    alignItems:'center',
+    backgroundColor:'#cccccc'
   },
   card:{
     marginBottom:10,

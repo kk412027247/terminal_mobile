@@ -1,10 +1,11 @@
 import host from '../../host';
-import {Alert} from 'react-native';
+import {Alert, Keyboard} from 'react-native';
 import {Toast} from 'native-base';
 import {handleNav} from "./navAction";
 import realm from '../realm/schema';
 import {handleImage} from './selectAction';
-import {handleSearchContent} from './queryAction'
+import {handleSearchContent} from './queryAction' ;
+import {getUserHistory} from "./historyAction";
 //import {reSign} from './signInAction'
 
 export const handleBrand = (text) => ({
@@ -37,7 +38,6 @@ export const createTAC = ()=>(
       data.append('brand',getState().addReducer.brand);
       data.append('model',getState().addReducer.model);
       data.append('TAC',getState().addReducer.TAC);
-
       if(getState().selectReducer.imageUri !== ''){
         const username = getState().signInReducer.username ?
           getState().signInReducer.username :
@@ -53,25 +53,59 @@ export const createTAC = ()=>(
           name: username + Date.now() + '.jpeg',
         })
       }
-      const url = getState().addReducer.status === 'add' ?
-        `http://${host}:3001/createTacWithImage` :
-        `http://${host}:3001/updateTacWithImage`;
+      let url;
+      switch(getState().addReducer.status){
+        case 'add':
+          url=`http://${host}:3001/createTacWithImage`;
+          break;
+        case 'update':
+          url=`http://${host}:3001/updateTacWithImage`;
+          break;
+        case 'delete':
+          url = `http://${host}:3001/deleteTacWithImage`;
+          break;
+        default:
+          url=`http://${host}:3001/createTacWithImage`;
 
+      }
+      //console.log(data);
       const res = await fetch(url,{
         method:'post',
         credentials:'include',
         body:data,
       });
       const result = await res.json();
-      //console.log(result);
       if(result[0]!=='createNeedSession'){
-         await Toast.show({
-          text:'提交成功',
+        let message ;
+        switch(result){
+          case 'saved':
+            message = {text:'保存成功', type:'success'};
+            break;
+          case 'cache':
+            message = {text:'该数据已存在，缓存至历史日志，请在PC端修改', type:'warning'};
+            break;
+          case 'exist':
+            message = {text:'保存失败，重复保存', type:'danger'};
+            break;
+          case 'updated':
+            message = {text:'修改成功', type:'success'};
+            break;
+          case 'delete':
+            message={text:'删除成功', type:'success'};
+            break;
+          default:
+            message = {text: JSON.stringify(result), type:'danger'}
+        }
+        dispatch(getUserHistory());
+        Toast.show({
+          text: message.text,
           position:'top',
-          type:'success',
-          duration:3000,
+          type: message.type,
+          duration:5000,
           buttonText:'确认',
-        })
+        });
+        dispatch(clean());
+        dispatch(handleNav('HISTORY'));
       }else{
         //dispatch(reSign(createTAC()))
         const userInfo = realm.objects('userInfo').filtered('id=1');
@@ -114,7 +148,8 @@ export const clean = ()=> (
     dispatch(handleModel(''));
     dispatch(handleTAC(''));
     dispatch(handleImage({}));
-    dispatch(handleSearchContent(''))
+    dispatch(handleSearchContent(''));
+    Keyboard.dismiss();
   }
 );
 

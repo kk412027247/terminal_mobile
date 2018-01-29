@@ -18,7 +18,7 @@ export default (state=initialState ,action)=>{
         state
       );
     }
-    case 'History':{
+    case 'HISTORY':{
       return AppWithNavigator.router.getStateForAction(
         NavigationActions.navigate({routeName:'history'}),
         state
