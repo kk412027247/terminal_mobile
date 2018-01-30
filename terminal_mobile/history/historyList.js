@@ -22,7 +22,6 @@ class HistoryList extends React.PureComponent{
     const {history, refresh, getUserHistory, stopLoadMore} = this.props;
     return(
       <FlatList
-        style={styles.padding}
         data={history}
         renderItem={({item})=>(
           <HistoryItem
@@ -46,10 +45,6 @@ class HistoryList extends React.PureComponent{
 }
 
 const styles = StyleSheet.create({
-  padding:{
-    paddingHorizontal:'2%',
-    paddingTop:10
-  },
   indicator:{
     height:35
   }

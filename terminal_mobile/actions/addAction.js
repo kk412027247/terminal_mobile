@@ -28,33 +28,44 @@ export const toggleStatus = (status) =>({
   status,
 });
 
+const toggleFetchingStatus = (bool) =>({
+  type: 'TOGGLE_FETCH',
+  fetching:bool,
+});
+
 export const createTAC = ()=>(
   (dispatch,getState)=>{
     (async ()=>{
+      dispatch(toggleFetchingStatus(true));
       if(!getState().addReducer.brand || !getState().addReducer.model || getState().addReducer.TAC.length !== 8){
         throw '提交失败，请补充空缺'
       }
-      const data = new FormData();
-      data.append('brand',getState().addReducer.brand);
-      data.append('model',getState().addReducer.model);
-      data.append('TAC',getState().addReducer.TAC);
-      if(getState().selectReducer.imageUri !== ''){
-        const username = getState().signInReducer.username ?
-          getState().signInReducer.username :
-          realm.objects('userInfo')[0].username ?
-          realm.objects('userInfo')[0].username :
-          ''
-        ;
-        data.append('imageWidth',getState().selectReducer.width);
-        data.append('imageHeight',getState().selectReducer.height);
-        data.append('image',{
-          uri:getState().selectReducer.imageUri,
-          type: 'image/*',
-          name: username + Date.now() + '.jpeg',
-        })
+      let data;
+      const status = getState().addReducer.status;
+      if(status !== 'delete'){
+        data = new FormData();
+        data.append('brand',getState().addReducer.brand);
+        data.append('model',getState().addReducer.model);
+        data.append('TAC',getState().addReducer.TAC);
+        if(getState().selectReducer.imageUri !== ''){
+          const username = getState().signInReducer.username ?
+                           getState().signInReducer.username :
+                           realm.objects('userInfo')[0].username ?
+                           realm.objects('userInfo')[0].username : '';
+          data.append('imageWidth',getState().selectReducer.width);
+          data.append('imageHeight',getState().selectReducer.height);
+          data.append('image',{
+            uri:getState().selectReducer.imageUri,
+            type: 'image/*',
+            name: username + Date.now() + '.jpeg',
+          })
+        }
+      }else{
+        data =JSON.stringify({TAC:getState().addReducer.TAC})
       }
+      
       let url;
-      switch(getState().addReducer.status){
+      switch(status){
         case 'add':
           url=`http://${host}:3001/createTacWithImage`;
           break;
@@ -71,10 +82,12 @@ export const createTAC = ()=>(
       //console.log(data);
       const res = await fetch(url,{
         method:'post',
+        headers: status === 'delete' ? {'Content-Type':'application/json'} : null,
         credentials:'include',
         body:data,
       });
       const result = await res.json();
+      dispatch(toggleFetchingStatus(false));
       if(result[0]!=='createNeedSession'){
         let message ;
         switch(result){
@@ -82,7 +95,7 @@ export const createTAC = ()=>(
             message = {text:'保存成功', type:'success'};
             break;
           case 'cache':
-            message = {text:'该数据已存在，缓存至历史日志，请在PC端修改', type:'warning'};
+            message = {text:'该数据已存在，已经缓存', type:'warning'};
             break;
           case 'exist':
             message = {text:'保存失败，重复保存', type:'danger'};
@@ -101,7 +114,7 @@ export const createTAC = ()=>(
           text: message.text,
           position:'top',
           type: message.type,
-          duration:5000,
+          duration:1000,
           buttonText:'确认',
         });
         dispatch(clean());
@@ -130,6 +143,7 @@ export const createTAC = ()=>(
         }
       }
     })().catch((err)=>{
+      dispatch(toggleFetchingStatus(false));
       Toast.show({
         text:JSON.stringify(err),
         position:'top',
@@ -138,7 +152,6 @@ export const createTAC = ()=>(
         buttonText:'取消'
       })
     });
-
   }
 );
 
@@ -170,7 +183,7 @@ export const searchHistory = () => (
             {text:'取消', onPress:()=>{
               dispatch(toggleStatus('add'));
               dispatch(handleTAC(''));
-            }},
+            },style: 'cancel'},
             {text:'查看',onPress:()=>{
                 dispatch(toggleStatus('update'));
                 dispatch(handleBrand(result.history[0]['品牌1']));

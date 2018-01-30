@@ -24,6 +24,12 @@ export default (state={},action)=>{
         status:action.status
       }
     }
+    case 'TOGGLE_FETCH' :{
+      return{
+        ...state,
+        fetching:action.fetching,
+      }
+    }
     default :{
       return state
     }

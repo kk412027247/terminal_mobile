@@ -108,7 +108,10 @@ const styles = StyleSheet.create({
     backgroundColor:'#cccccc'
   },
   card:{
+    //marginTop:10,
     marginBottom:10,
+    marginRight:10,
+    marginLeft:10,
     flexDirection:'row',
   },
   saveTitle:{

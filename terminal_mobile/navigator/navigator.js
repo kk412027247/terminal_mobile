@@ -1,7 +1,7 @@
 import {TabNavigator, StackNavigator} from 'react-navigation';
 import Add from '../add/add';
 import Select from '../select/select';
-import SignIn from '../signInPage/signIn';
+import SignIn from '../signIn/signIn';
 import FooterTabBar from '../footer/footerTabBar';
 import Query from '../query/query';
 import Camera from '../camera/camera';

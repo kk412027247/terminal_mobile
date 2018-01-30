@@ -26,6 +26,7 @@ const initStated = {
     model:'',
     TAC:'',
     status:'add',
+    fetching:false,
   },
   signInReducer:{
     username:'',

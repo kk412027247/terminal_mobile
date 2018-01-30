@@ -1,7 +1,7 @@
 import React from 'react';
 import {View,StyleSheet, ImageBackground, Dimensions, Platform} from 'react-native';
 import {Container,Header,Left,Body, Right, Title, Content,
-  Form, Item, Input, Label, Button, Text, Icon}  from 'native-base';
+  Form, Item, Input, Label, Button, Text, Icon, Spinner}  from 'native-base';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {handleBrand, clean, handleModel, handleTAC, createTAC, toggleStatus, searchHistory} from '../actions/addAction';
@@ -21,7 +21,7 @@ class Add extends React.Component{
 
   render(){
     const {handleBrand, handleModel, handleTAC, createTAC,
-      TAC, model, brand,handleNav, imageUri, width, height ,clean, status, toggleStatus} = this.props;
+      TAC, model, brand,handleNav, imageUri, width, height ,clean, status, toggleStatus, fetching} = this.props;
     const style = {
       width: Dimensions.get('window').height * 0.35 * width/height,
       height: Dimensions.get('window').height * 0.35
@@ -29,7 +29,6 @@ class Add extends React.Component{
     const _style = {...style, marginTop:20};
     return(
       <Container >
-
         <Header>
           {Platform.OS === 'ios' ? <Left/> : <View/>}
           <Body style={Platform.OS === 'android' ? styles.androidHead : {}}>
@@ -74,7 +73,6 @@ class Add extends React.Component{
                   </Button> :
                   <View/>  
                 }
-
               </Item>
               <Item
                 inlineLabel
@@ -118,19 +116,22 @@ class Add extends React.Component{
                     </Button>
                   </ImageBackground>
                 </View>
-
               }
             </Form>
-            <Button
-              onPress={createTAC}
-              block
-              primary={status === 'add'}
-              warning={status === 'update'}
-              danger={status === 'delete'}
-              style={styles.button}
-              title={''}>
-              <Text>{status === 'add'?' 录 入 ':status === 'update'?' 修 改 ':' 删 除 '}</Text>
-            </Button>
+            {
+              fetching ?
+              <Spinner/> :
+              <Button
+                onPress={createTAC}
+                block
+                primary={status === 'add'}
+                warning={status === 'update'}
+                danger={status === 'delete'}
+                style={styles.button}
+                title={''}>
+                <Text>{status === 'add'?' 录 入 ':status === 'update'?' 修 改 ':' 删 除 '}</Text>
+              </Button>
+            }
           </View>
         </Content>
       </Container>
@@ -178,7 +179,6 @@ const styles = StyleSheet.create({
   }
 });
 
-
 Add.propTypes = {
   handleBrand: PropTypes.func,
   handleModel: PropTypes.func,
@@ -195,6 +195,7 @@ Add.propTypes = {
   status:PropTypes.string,
   searchHistory:PropTypes.func,
   toggleStatus:PropTypes.func,
+  fetching:PropTypes.bool,
 };
 
 const mapStateToProps = state => ({
@@ -202,10 +203,11 @@ const mapStateToProps = state => ({
   brand:state.addReducer.brand,
   model:state.addReducer.model,
   imageUri:state.selectReducer.imageUri ,
-  height: state.selectReducer.height,
-  width: state.selectReducer.width,
-  status: state.addReducer.status,
-  index: state.nav.routes[1].index,
+  height:state.selectReducer.height,
+  width:state.selectReducer.width,
+  status:state.addReducer.status,
+  index:state.nav.routes[1].index,
+  fetching:state.addReducer.fetching,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -226,7 +228,6 @@ const mapDispatchToProps = dispatch => ({
       dispatch(toggleStatus('update'))  
     }
   }
-
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Add);

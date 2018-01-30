@@ -1,4 +1,9 @@
 import host from '../../host';
+import realm from '../realm/schema';
+import {handleNav} from '../actions/navAction';
+import {Toast} from 'native-base';
+import {Alert} from 'react-native';
+
 
 const handleUserHistory = (history) =>({
   type:'USER_HISTORY',
@@ -9,7 +14,6 @@ const toggleRefresh = (bool) => ({
   type:'TOGGLE_REFRESH',
   refresh:bool,
 });
-
 
 const handleSkip = (skip) => ({
   type:'HANDLE_SKIP',
@@ -48,3 +52,42 @@ export const getUserHistory = (loadMore=false)=>(
     })();
   }
 );
+
+
+export const signOut = () =>(
+  dispatch=>{
+    Alert.alert(
+      '用户: '+realm.objects('userInfo')[0].username,
+      '现在需要退出账号吗',
+      [
+        {text:'取消',style:'cancel'},
+        {text:'退出账号', onPress:()=>{
+          fetch(`http://${host}:3001/signOut`)
+            .then(res=>res.json())
+            .then(()=>{
+              realm.write(()=>realm.deleteAll());
+              dispatch(handleNav('SIGN_IN'));
+              Toast.show({
+                text:'已退出',
+                position:'top',
+                type:'success',
+                duration:1000,
+                buttonText:'取消'
+              })
+            }).catch(err=>{
+              console.log(err);
+              Toast.show({
+              text:JSON.stringify(err),
+              position:'top',
+              type:'warning',
+              duration:4000,
+              buttonText:'取消'
+              })
+            });
+        }}
+      ],
+      { cancelable: false }
+    )
+  }
+);
+
