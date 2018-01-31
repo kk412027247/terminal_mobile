@@ -1,5 +1,5 @@
 import React from 'react';
-import {View,StyleSheet, ImageBackground, Dimensions, Platform} from 'react-native';
+import {View,StyleSheet, ImageBackground, Dimensions, Platform, Keyboard} from 'react-native';
 import {Container,Header,Left,Body, Right, Title, Content,
   Form, Item, Input, Label, Button, Text, Icon, Spinner}  from 'native-base';
 import {connect} from 'react-redux';
@@ -37,6 +37,7 @@ class Add extends React.Component{
           <Right>
             { brand !== '' ||  model !== '' || TAC !== '' || imageUri !== '' ?
               <Button
+                title={''}
                 dark
                 transparent
                 onPress={clean}
@@ -63,6 +64,7 @@ class Add extends React.Component{
                 {
                   status !== 'add' ?
                   <Button
+                    title={''}
                     transparent
                     onPress={toggleStatus.bind(null,status)}
                   >
@@ -91,6 +93,7 @@ class Add extends React.Component{
               {
                 imageUri === '' ?
                 <Button
+                  title={''}
                   info
                   style={styles.iconButton}
                   transparent
@@ -104,10 +107,12 @@ class Add extends React.Component{
                     source={imageUri !== '' ? {uri:imageUri} : null}
                   >
                     <Button
+                      title={''}
                       transparent
                       onPress={handleNav.bind(null,'SHOW_IMAGE')}
                       style={style}>
                       <Button
+                        title={''}
                         transparent
                         onPress={handleNav.bind(null,'TO_SELECT')}
                       >
@@ -215,7 +220,10 @@ const mapDispatchToProps = dispatch => ({
   handleModel: model => dispatch(handleModel(model)),
   handleTAC: TAC => dispatch(handleTAC(TAC)),
   createTAC: () => dispatch(createTAC()),
-  handleNav:(nav) => dispatch(handleNav(nav)),
+  handleNav:(nav) => {
+    dispatch(handleNav(nav));
+    Keyboard.dismiss();
+  },
   clean:()=> {
     dispatch(clean());
     dispatch(toggleStatus('add'))

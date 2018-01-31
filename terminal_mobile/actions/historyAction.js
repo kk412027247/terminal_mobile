@@ -4,7 +4,6 @@ import {handleNav} from '../actions/navAction';
 import {Toast} from 'native-base';
 import {Alert} from 'react-native';
 
-
 const handleUserHistory = (history) =>({
   type:'USER_HISTORY',
   history,
@@ -52,7 +51,6 @@ export const getUserHistory = (loadMore=false)=>(
     })();
   }
 );
-
 
 export const signOut = () =>(
   dispatch=>{
