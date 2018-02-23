@@ -29,6 +29,7 @@ class Person extends React.Component{
           </Body>
           <Right>
             <Button
+              title={''}
               transparent
               onPress={signOut}
             >

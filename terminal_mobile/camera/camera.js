@@ -8,12 +8,12 @@ import {barCodeRead, fetchDate} from '../actions/queryAction' ;
 import {goBack} from '../actions/navAction';
 let i = 0;
 
-class BarcodeScan extends Component {
+class BarcodeCamera extends Component {
   state={flash: Camera.constants.FlashMode.auto};
-  takePicture = () => this.camera.capture().then(data=>console.log(data)).catch(err=>console.log(err));
+  takePicture = () => this.camera.capture();
   componentWillUnmount(){
-    if(this.props.barcode !== ''){
-      this.props.fetchDate(this.props.barcode)
+    if(this.props.barcode !== '' && Number(this.props.barcode)){
+      this.props.fetchDate(this.props.barcode);
     }
   }
   render () {
@@ -84,7 +84,7 @@ class BarcodeScan extends Component {
   }
 }
 
-BarcodeScan.propTypes = {
+BarcodeCamera.propTypes = {
   barcode:PropTypes.string,
   barCodeRead:PropTypes.func,
   goBack:PropTypes.func,
@@ -131,7 +131,7 @@ const mapStateToProps = state =>({
 const mapDispatchToProps = dispatch => ({
   barCodeRead: (event) => dispatch(barCodeRead(event.data)),
   goBack: () => dispatch(goBack()),
-  fetchDate: () => dispatch(fetchDate()),
+  fetchDate: (barcode) => dispatch(fetchDate(barcode)),
 });
 
-export default connect(mapStateToProps,mapDispatchToProps)(BarcodeScan)
+export default connect(mapStateToProps,mapDispatchToProps)(BarcodeCamera)

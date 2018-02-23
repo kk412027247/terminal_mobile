@@ -17,6 +17,7 @@ let i =0;
 export const fetchDate = (query)=>(
   dispatch=>{
     (async ()=>{
+      console.log(query);
       dispatch(handleSearchContent(query));
       dispatch(handleFetchStatus('fetching'));
       const check = ++i;

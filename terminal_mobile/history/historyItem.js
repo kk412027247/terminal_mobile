@@ -30,7 +30,7 @@ class HistoryItem extends React.Component{
               name={status==='saved' ? 'ios-cloud-done' : 'ios-cloud-done'}
             />
             <Text style={titleStyle}>
-              {status==='saved'?'已保存':'未保存'}
+              {status==='saved'?'已保存':'已缓存'}
             </Text>
             <Right>
               <Button
