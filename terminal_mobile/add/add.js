@@ -1,13 +1,17 @@
 import React from 'react';
-import {View,StyleSheet, ImageBackground, Dimensions, Platform, Keyboard} from 'react-native';
+import {View,StyleSheet, ImageBackground, Dimensions, Platform, Keyboard, Image} from 'react-native';
 import {Container,Header,Left,Body, Right, Title, Content,
   Form, Item, Input, Label, Button, Text, Icon, Spinner}  from 'native-base';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {handleBrand, clean, handleModel, handleTAC, createTAC, toggleStatus, searchHistory} from '../actions/addAction';
 import {handleNav} from '../actions/navAction';
+import ImagePicker from 'react-native-image-picker';
+
 
 class Add extends React.Component{
+
+  state={source:''};
 
   shouldComponentUpdate(nextProps){
     if(nextProps.TAC.length === 8 && nextProps.TAC !== this.props.TAC && this.props.index !==2){
@@ -49,6 +53,15 @@ class Add extends React.Component{
           </Right>
         </Header>
         <Content>
+          <Button
+            onPress={()=>{
+              ImagePicker.launchImageLibrary({}, (response)  => {
+                console.log(response)
+              });
+            }}
+          >
+            <Text>123</Text>
+          </Button>
           <View style={styles.content}>
             <Form style={styles.form}>
               <Item
