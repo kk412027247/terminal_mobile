@@ -1,4 +1,7 @@
 import host from "../../host";
+import ImagePicker from 'react-native-image-picker';
+
+
 
 export const selectImages = (images, current) =>({
   type:'SELECT_IMAGES',
@@ -14,3 +17,27 @@ export const handleImage = (doc) =>({
   height:doc.imageHeight ? Number(doc.imageHeight) : 1,
   imageUri:doc.imagePath ? `http://${host}:3001`+doc.imagePath.replace(/public/,'') : '',
 });
+
+
+export const pickImage = ()=>(
+  dispatch=>{
+    ImagePicker.launchImageLibrary({}, (response)  => {
+      if(response.uri){
+        dispatch({
+          type:'SELECT_IMAGES',
+          imageUri:response.uri,
+          width:response.width,
+          height:response.height,
+        })
+      }
+    });
+  }
+);
+
+export const removeImage = ()=>({
+  type:'SELECT_IMAGES',
+  imageUri:'',
+  width:1,
+  height:1,
+});
+

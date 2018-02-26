@@ -6,7 +6,7 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {handleBrand, clean, handleModel, handleTAC, createTAC, toggleStatus, searchHistory} from '../actions/addAction';
 import {handleNav} from '../actions/navAction';
-import ImagePicker from 'react-native-image-picker';
+import {pickImage, removeImage} from '../actions/selectAction';
 
 
 class Add extends React.Component{
@@ -24,11 +24,13 @@ class Add extends React.Component{
   }
 
   render(){
-    const {handleBrand, handleModel, handleTAC, createTAC,
-      TAC, model, brand,handleNav, imageUri, width, height ,clean, status, toggleStatus, fetching} = this.props;
+    const {handleBrand, handleModel, handleTAC, createTAC, TAC, model, brand,handleNav, imageUri, width, height ,clean,
+      status, toggleStatus, fetching, pickImage, removeImage} = this.props;
     const style = {
       width: Dimensions.get('window').height * 0.35 * width/height,
-      height: Dimensions.get('window').height * 0.35
+      height: Dimensions.get('window').height * 0.35,
+      flexDirection:'column'
+
     };
     const _style = {...style, marginTop:20};
     return(
@@ -53,16 +55,6 @@ class Add extends React.Component{
           </Right>
         </Header>
         <Content>
-          <Button
-            title={''}
-            onPress={()=>{
-              ImagePicker.launchImageLibrary({}, (response)  => {
-                console.log(response)
-              });
-            }}
-          >
-            <Text>123</Text>
-          </Button>
           <View style={styles.content}>
             <Form style={styles.form}>
               <Item
@@ -111,7 +103,7 @@ class Add extends React.Component{
                   info
                   style={styles.iconButton}
                   transparent
-                  onPress={handleNav.bind(null,'TO_SELECT')}
+                  onPress={pickImage}
                 >
                   <Icon style={styles.icon} name={'ios-image'}/>
                 </Button> :
@@ -128,9 +120,17 @@ class Add extends React.Component{
                       <Button
                         title={''}
                         transparent
-                        onPress={handleNav.bind(null,'TO_SELECT')}
+                        onPress={pickImage}
                       >
                         <Icon style={styles.replaceIcon} name={'md-refresh-circle'}/>
+                      </Button>
+                      
+                      <Button
+                        title={''}
+                        transparent
+                        onPress={removeImage}
+                      >
+                        <Icon style={styles.deleteIcon} name={'ios-close'}/>
                       </Button>
                     </Button>
                   </ImageBackground>
@@ -190,6 +190,11 @@ const styles = StyleSheet.create({
     color:'#ffffff',
     fontWeight:'bold'
   } ,
+  deleteIcon:{
+    fontSize:40,
+    color:'red',
+    fontWeight:'bold'
+  } ,
   cleanIcon:{
     color: Platform.OS === 'ios' ? '#000000' : '#ffffff'
   },
@@ -215,6 +220,8 @@ Add.propTypes = {
   searchHistory:PropTypes.func,
   toggleStatus:PropTypes.func,
   fetching:PropTypes.bool,
+  pickImage:PropTypes.func,
+  removeImage:PropTypes.func,
 };
 
 const mapStateToProps = state => ({
@@ -249,7 +256,9 @@ const mapDispatchToProps = dispatch => ({
     }else{
       dispatch(toggleStatus('update'))  
     }
-  }
+  },
+  pickImage:() => dispatch(pickImage()),
+  removeImage:()=>dispatch(removeImage()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Add);
