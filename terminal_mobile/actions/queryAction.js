@@ -10,14 +10,14 @@ const fetchSuccess = (result)=>({
 
 export const handleSearchContent = (content)=>({
   type:'SEARCH_CONTENT',
-  content:content.replace(/(^\s*)|(\s*$)/g, '')
+  //content:content.replace(/(^\s*)|(\s*$)/g, '')
+  content,
 });
 
 let i =0;
 export const fetchDate = (query)=>(
   dispatch=>{
     (async ()=>{
-      console.log(query);
       dispatch(handleSearchContent(query));
       dispatch(handleFetchStatus('fetching'));
       const check = ++i;
@@ -81,15 +81,3 @@ export const handleFetchStatus = (status) =>({
   type:'FETCH_STATUS',
   status,
 });
-
-//
-// export const barCodeRead = (barcode) =>(
-//   (dispatch, getState)=>{
-//     dispatch(handleBarcode(barcode));
-//     console.log(barcode)
-//
-//
-//
-//
-//   }
-// );

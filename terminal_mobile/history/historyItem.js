@@ -139,7 +139,7 @@ const mapStateToProps = (state,ownProp) => ({
   brand: ownProp.brand,
   model: ownProp.model,
   TAC: ownProp.TAC,
-  uri: ownProp.uri,
+  uri: ownProp.uri.replace(/\\/g,'/'),
   width: ownProp.width,
   height: ownProp.height,
 });
