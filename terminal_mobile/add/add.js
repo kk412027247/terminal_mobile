@@ -1,5 +1,5 @@
 import React from 'react';
-import {View,StyleSheet, ImageBackground, Dimensions, Platform, Keyboard, Image} from 'react-native';
+import {View,StyleSheet, ImageBackground, Dimensions, Platform, Keyboard} from 'react-native';
 import {Container,Header,Left,Body, Right, Title, Content,
   Form, Item, Input, Label, Button, Text, Icon, Spinner}  from 'native-base';
 import {connect} from 'react-redux';
@@ -54,6 +54,7 @@ class Add extends React.Component{
         </Header>
         <Content>
           <Button
+            title={''}
             onPress={()=>{
               ImagePicker.launchImageLibrary({}, (response)  => {
                 console.log(response)
