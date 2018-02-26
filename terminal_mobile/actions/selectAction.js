@@ -1,5 +1,6 @@
 import host from "../../host";
 import ImagePicker from 'react-native-image-picker';
+import {Keyboard} from "react-native";
 
 
 
@@ -19,8 +20,10 @@ export const handleImage = (doc) =>({
 });
 
 
-export const pickImage = ()=>(
-  dispatch=>{
+
+export const pickImage = ()=>{
+  Keyboard.dismiss();
+  return dispatch=>{
     ImagePicker.launchImageLibrary({}, (response)  => {
       if(response.uri){
         dispatch({
@@ -32,12 +35,14 @@ export const pickImage = ()=>(
       }
     });
   }
-);
+};
 
-export const removeImage = ()=>({
-  type:'SELECT_IMAGES',
-  imageUri:'',
-  width:1,
-  height:1,
-});
+export const removeImage = ()=>{
+  Keyboard.dismiss();
+  return {
+    type:'SELECT_IMAGES',
+    imageUri:'',
+    width:1,
+    height:1,
+}};
 
