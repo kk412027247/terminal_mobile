@@ -5,6 +5,7 @@ import {Toast} from 'native-base';
 import {Alert} from 'react-native';
 import Realm from "realm";
 
+
 const handleUserHistory = (history) =>({
   type:'USER_HISTORY',
   history,

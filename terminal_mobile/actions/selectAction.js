@@ -16,9 +16,8 @@ export const handleImage = (doc) =>({
   type:'HANDLE_IMAGE',
   width:doc.imageWidth ? Number(doc.imageWidth) : 1,
   height:doc.imageHeight ? Number(doc.imageHeight) : 1,
-  imageUri:doc.imagePath ? `http://${host}:3001`+doc.imagePath.replace(/public/,'') : '',
+  imageUri:doc.imagePath ? `http://${host}:3001`+doc.imagePath.replace(/public/,'').replace(/\\/g,'/') : '',
 });
-
 
 
 export const pickImage = ()=>{

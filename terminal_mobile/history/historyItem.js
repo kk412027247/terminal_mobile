@@ -73,7 +73,6 @@ class HistoryItem extends React.Component{
             <Text>无图片</Text>
           </View>
         }
-
       </Card>
     )
   }
