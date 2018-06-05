@@ -27,7 +27,7 @@ export default (state=initialState ,action)=>{
     case 'SIGN_IN':{
       return AppWithNavigator.router.getStateForAction(
         NavigationActions.navigate({routeName:'signIn'}),
-        state
+        initialState
       )
     }
     case 'GO_BACK':{
